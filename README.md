@@ -9,7 +9,8 @@ Solution: Spreadsheet
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
 # Spreadsheet functionality overview
-Jan 11th: Currently setting up github, README files, and analyzing the assignment.
+Jan 11th: Currently setting up GitHub, README files, and analyzing the assignment. Added all files up until instruction 6 on the "Assignment One - Formula Evaluator" Google doc. I added the "FormulaEvaluatorTester" project
+with it's FrameWork set to net 8.0, since I couldn't add it as a 6.0 as instructed. 
 
 # Time Spent
-Jan 11th: 
+Jan 11th: 1 1/2 hours
