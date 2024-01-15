@@ -28,5 +28,3 @@ List any peers (or other people) in the class (or outside for that matter) that 
     1. Title of page - URL
     2. Title of page - URL
     3. Title of page - URL
-
-
