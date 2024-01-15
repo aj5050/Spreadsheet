@@ -7,8 +7,8 @@
     /// </summary>
     public static class Evaluator
     {
-        private static Stack<String> operatorStack;
-        private static Stack<int> valueStack;
+        private static Stack<String> operatorStack = new Stack<string>();
+        private static Stack<int> valueStack = new Stack<int>();
         public delegate int Lookup(String variable_name);
 
         public static int Evaluate(String expression, Lookup variableEvaluator)
