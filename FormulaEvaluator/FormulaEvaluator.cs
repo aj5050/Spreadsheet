@@ -17,7 +17,7 @@ public static class Evaluator{
             {
                 if(operatorStack.Count != 0 && valueStack.Count!=0 && (operatorStack.Peek() == "*" || operatorStack.Peek()=="/"))
                 {
-                    if (operatorStack.Peek() == "*")
+                    if (operatorStack.Pop() == "*")
                     {
                         valueStack.Push(valueStack.Pop() * result);
                     }
@@ -35,7 +35,7 @@ public static class Evaluator{
             {
                 if (operatorStack.Count != 0 && valueStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                 {
-                    if (operatorStack.Peek() == "*")
+                    if (operatorStack.Pop() == "*")
                     {
                         /// the variableEvaluator should throw an exception if the variable cannot be found
                         valueStack.Push(valueStack.Pop() * variableEvaluator(substring));
@@ -49,9 +49,72 @@ public static class Evaluator{
                 {
                     valueStack.Push(variableEvaluator(substring));
                 }
+            }else if(substring == "+" || substring == "-" || substring == "*" || substring == "/")
+            {
+                if((operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
+                {
+                    if (operatorStack.Pop() == "+")
+                    {
+                        valueStack.Push(valueStack.Pop() + valueStack.Pop());
+                    }
+                    else
+                    {
+                        int temp1 = valueStack.Pop();
+                        valueStack.Push(valueStack.Pop() - temp1);
+                    }
+                }
+                operatorStack.Push(substring);
+            }else if(substring == "("|| substring == ")")
+            {
+                if (substring == "(")
+                {
+                    operatorStack.Push(substring);
+                }
+                else
+                {
+                    ///step one
+                    if ((operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
+                    {
+                        if (operatorStack.Pop() == "+")
+                        {
+                            valueStack.Push(valueStack.Pop() + valueStack.Pop());
+                        }
+                        else
+                        {
+                            int temp1 = valueStack.Pop();
+                            valueStack.Push(valueStack.Pop() - temp1);
+                        }
+                    }
+                    ///step 2
+                    operatorStack.Pop();
+                    ///step 3
+                    if (operatorStack.Count != 0 && valueStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
+                    {
+                        int temp1 = valueStack.Pop();
+                        if (operatorStack.Pop() == "*")
+                        {
+                            valueStack.Push(valueStack.Pop() * temp1);
+                        }
+                        else
+                        {
+                            valueStack.Push(valueStack.Pop() / temp1);
+                        }
+                    }
+                }
+            }
+        }if (operatorStack.Count != 0)
+        {
+            if (operatorStack.Pop() == "+")
+            {
+                valueStack.Push(valueStack.Pop() + valueStack.Pop());
+            }
+            else
+            {
+                int temp1 = valueStack.Pop();
+                valueStack.Push(valueStack.Pop() - temp1);
             }
         }
-        // TODO...
-        return 0;
+        // end result
+        return valueStack.Pop();
     }
 }

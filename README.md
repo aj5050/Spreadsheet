@@ -13,7 +13,9 @@ Jan 11th: Currently setting up GitHub, README files, and analyzing the assignmen
 with it's FrameWork set to net 8.0, since I couldn't add it as a 6.0 as instructed. 
 Jan 13th: Added additional README file for the FormulaEvaluatorTester program. Added stacks for operators and values, delegates and methods, and finished the first 2 conditions of the evaluator method (the substring is an integer
 or a stack)
+Jan 15th: 
 
 # Time Spent
 Jan 11th: 1 1/2 hours
 Jan 13th: 1 hour 10 min
+Jan 15th: 12:00
