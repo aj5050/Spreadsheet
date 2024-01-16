@@ -22,15 +22,19 @@
             string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
             foreach (string substring in substrings)
             {
+                // this if statement asserts if the substring is an integer or not, and if it is, it calls the valPush helper method. 
                 if (int.TryParse(substring, out int result))
                 {
                     valPush(result);
                 }                   
-                // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer, and all variables require a length of at least 2. 
+                // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer,
+                // and all variables require a length of at least 2. 
                 else if (substring.Length > 1)
                 {
                     valPush(variableEvaluator(substring));
                 }
+                // this else if statement asserts that the substring is an operator, and if it is, then it either calls the opPop helper method
+                // (for the + and - operators) or pushes the operator onto the operatorStack
                 else if (substring == "+" || substring == "-" || substring == "*" || substring == "/")
                 {
                     if (substring =="+" || substring == "-" )
@@ -39,6 +43,8 @@
                     }
                     operatorStack.Push(substring);
                 }
+                // this else if statement asserts that the substring is a parentheses, and then pushes it onto the operator stack if its the opening (
+                // or works out the rest of the expression that's inside the parentheses if the token is the closing )   
                 else if (substring == "(" || substring == ")")
                 {
                     if (substring == "(")
@@ -59,7 +65,11 @@
                             {
                                 valueStack.Push(valueStack.Pop() * temp1);
                             }
-                            else if(temp1 != 0)
+                            else if (temp1 == 0)
+                            {
+                                throw new ArgumentException("Cannot Divide By 0");
+                            }
+                            else
                             {
                                 valueStack.Push(valueStack.Pop() / temp1);
                             }
@@ -82,6 +92,10 @@
             // end result
             return valueStack.Pop();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
         private static void valPush(int input)
         {
             if (operatorStack.Count != 0 && valueStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
@@ -90,7 +104,11 @@
                 {
                     valueStack.Push(valueStack.Pop() * input);
                 }
-                else if (input != 0)
+                else if (input == 0)
+                {
+                    throw new ArgumentException("Cannot Divide By 0");
+                }
+                else
                 {
                     valueStack.Push(valueStack.Pop() / input);
                 }
@@ -100,6 +118,9 @@
                 valueStack.Push(input);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
         private static void opPop() {
             if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
             {
