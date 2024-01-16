@@ -16,6 +16,6 @@ internal class FormulaEvaluatorTester
         if (Evaluator.Evaluate("5+((25/5)/5)", null) == 6) Console.WriteLine("Nested Parentheses Works");
         if (Evaluator.Evaluate("5/0", null) == 5) Console.WriteLine("Division by 0 is wrong");
         if (Evaluator.Evaluate("5+5*2", null) == 15) Console.WriteLine("PEMDAS success");
-
+        if (Evaluator.Evaluate("5-5+(5/5)*5", null) == 5) Console.WriteLine("Ultimate PEMDAS success");
     }
 }
