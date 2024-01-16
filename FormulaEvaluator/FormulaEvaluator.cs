@@ -10,7 +10,12 @@
         private static Stack<String> operatorStack = new Stack<string>();
         private static Stack<int> valueStack = new Stack<int>();
         public delegate int Lookup(String variable_name);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="variableEvaluator"></param>
+        /// <returns></returns>
         public static int Evaluate(String expression, Lookup variableEvaluator)
         {
             string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
@@ -56,7 +61,7 @@
                 }
                 else if (substring == "+" || substring == "-" || substring == "*" || substring == "/")
                 {
-                    if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2 )
+                    if ((substring =="+" || substring == "-" ) && operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2 )
                     {
                         if (operatorStack.Pop() == "+")
                         {

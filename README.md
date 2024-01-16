@@ -19,4 +19,4 @@ or a stack)
 Jan 11th: 1 1/2 hours
 <br>Jan 13th: 1 hour 10 min
 <br>Jan 15th: 12:00 - 12:25 1:00 - 2:13 7:55 - 8:00
-<br>Jan 16th: 11:25 am - 12pm
+<br>Jan 16th: 11:25 am - 12pm 12:45pm - 1:10 pm
