@@ -56,7 +56,7 @@
                 }
                 else if (substring == "+" || substring == "-" || substring == "*" || substring == "/")
                 {
-                    if ((operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
+                    if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2 )
                     {
                         if (operatorStack.Pop() == "+")
                         {
@@ -79,7 +79,7 @@
                     else
                     {
                         ///step one
-                        if ((operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2 )
                         {
                             if (operatorStack.Pop() == "+")
                             {
