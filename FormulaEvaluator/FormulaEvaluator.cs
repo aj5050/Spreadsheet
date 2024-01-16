@@ -13,7 +13,7 @@
 
         public static int Evaluate(String expression, Lookup variableEvaluator)
         {
-            string[] substrings = Regex.Split(expression, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
+            string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
             foreach (string substring in substrings)
             {
                 if (int.TryParse(substring, out int result))
@@ -24,7 +24,7 @@
                         {
                             valueStack.Push(valueStack.Pop() * result);
                         }
-                        else
+                        else if(result != 0)
                         {
                             valueStack.Push(valueStack.Pop() / result);
                         }
@@ -44,7 +44,7 @@
                             /// the variableEvaluator should throw an exception if the variable cannot be found
                             valueStack.Push(valueStack.Pop() * variableEvaluator(substring));
                         }
-                        else
+                        else if (variableEvaluator(substring) != 0)
                         {
                             valueStack.Push(valueStack.Pop() / variableEvaluator(substring));
                         }
@@ -101,7 +101,7 @@
                             {
                                 valueStack.Push(valueStack.Pop() * temp1);
                             }
-                            else
+                            else if(temp1 != 0)
                             {
                                 valueStack.Push(valueStack.Pop() / temp1);
                             }

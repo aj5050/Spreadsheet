@@ -25,7 +25,7 @@ List any peers (or other people) in the class (or outside for that matter) that 
 
 # References:
 
-    1. Title of page - URL
+    1. C# | Trim() Method - https://www.geeksforgeeks.org/c-sharp-trim-method/#
     2. Title of page - URL
     3. Title of page - URL
 
