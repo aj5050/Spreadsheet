@@ -1,20 +1,19 @@
 ﻿/// <summary>
-/// Author:    [Your Name]
-/// Partner:   [Partner Name or None]
-/// Date:      [Date of Creation]
+/// Author:    Austin January
+/// Partner:   None
+/// Date:      1-11-2024
 /// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and [Your Name(s)] - This work may not 
+/// Copyright: CS 3500 and Austin January - This work may not 
 ///            be copied for use in Academic Coursework.
 ///
-/// I, [your name], certify that I wrote this code from scratch and
+/// I, Austin January, certify that I wrote this code from scratch and
 /// did not copy it in part or whole from another source.  All 
 /// references used in the completion of the assignments are cited 
 /// in my README file.
 ///
 /// File Contents
-///
-///    [... and of course you should describe the contents of the 
-///    file in broad terms here ...]
+///     This file contains the FormulaEvaluator library, as well as the evaluator class and evaluator method along with it's private helper methods
+/// 
 /// </summary>
 namespace FormulaEvaluator
 {
@@ -23,7 +22,7 @@ namespace FormulaEvaluator
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// This class contains methods for evaluating mathmatical expressions that are in the form of strings. It uses 2 stacks: an operator stack for the
+    /// This class contains methods for evaluating mathematical expressions that are in the form of strings. It uses 2 stacks: an operator stack for the
     /// operators and parentheses, and a value stack for all of the numbers. It also contains a delegate method that handles variables in the expression.
     /// </summary>
     public static class Evaluator
@@ -47,18 +46,23 @@ namespace FormulaEvaluator
         /// <returns> the overall value of the expression (if there is one) </returns>
         public static int Evaluate(String expression, Lookup variableEvaluator)
         {
+            operatorStack = new Stack<string>();
+            valueStack = new Stack<int>();
             string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
             foreach (string substring in substrings)
             {
-                
+                if(substring == "")
+                {
+
+                }
                 // this if statement asserts if the substring is an integer or not, and if it is, it calls the valPush helper method. 
-                if (int.TryParse(substring, out int result))
+                else if (int.TryParse(substring, out int result))
                 {
                     valPush(result);
                 }                   
                 // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer,
                 // and all variables require a length of at least 2. 
-                else if (substring.Length > 1 && isVariable(substring))
+                else if (isVariable(substring))
                 {
                     valPush(variableEvaluator(substring));
                 }
@@ -106,7 +110,7 @@ namespace FormulaEvaluator
                     }
                 }
             }
-            if (operatorStack.Count != 0)
+            if (operatorStack.Count != 0 && valueStack.Count>=2)
             {
                 if (operatorStack.Pop() == "+")
                 {
@@ -118,7 +122,7 @@ namespace FormulaEvaluator
                     valueStack.Push(valueStack.Pop() - temp1);
                 }
             }
-            //throw exception for empty valuestack
+            //throw exception for empty valueStack
             if(valueStack.Count == 0)
             {
                 throw new ArgumentException("the final result should be in the stack");
@@ -172,20 +176,22 @@ namespace FormulaEvaluator
                 
         }
         /// <summary>
-        /// 
+        /// This method checks if the given string qualifies as a variable
         /// </summary>
-        /// <param name="potentialVar"></param>
-        /// <returns></returns>
+        /// <param name="potentialVar"> The string that is being evaluated as a variable </param>
+        /// <returns> A true/false statement based on whether the string qualifies as a variable </returns>
         private static bool isVariable(string potentialVar)
         {
-            
-            Type varTypeStart = potentialVar.ToCharArray()[0].GetType();
-            bool intExists = int.TryParse(potentialVar.ToCharArray().Last().ToString(), out int varTypeEnd);
-
-            if (varTypeStart.Equals(typeof(string)) && intExists)
+            if (potentialVar.Length > 1)
             {
-                return true;
+                Char varStart = potentialVar.ToCharArray()[0];
+                bool intExists = int.TryParse(potentialVar.ToCharArray().Last().ToString(), out int varTypeEnd);
+                if (char.IsLetter(varStart) && intExists)
+                {
+                    return true;
+                }
             }
+            
             return false;
         }
     }

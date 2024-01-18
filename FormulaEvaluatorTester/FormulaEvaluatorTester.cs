@@ -1,20 +1,19 @@
 ﻿/// <summary>
-/// Author:    [Your Name]
-/// Partner:   [Partner Name or None]
-/// Date:      [Date of Creation]
+/// Author:    Austin January
+/// Partner:   None
+/// Date:      1-11-2024
 /// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and [Your Name(s)] - This work may not 
+/// Copyright: CS 3500 and Austin January - This work may not 
 ///            be copied for use in Academic Coursework.
 ///
-/// I, [your name], certify that I wrote this code from scratch and
+/// I, Austin January, certify that I wrote this code from scratch and
 /// did not copy it in part or whole from another source.  All 
 /// references used in the completion of the assignments are cited 
 /// in my README file.
 ///
 /// File Contents
-///
-///    [... and of course you should describe the contents of the 
-///    file in broad terms here ...]
+///    This file contains a main function that is used to test the Evaluator Class from the FormulaEvaluator library
+///    
 /// </summary>
 using FormulaEvaluator;
 
@@ -42,6 +41,116 @@ internal class FormulaEvaluatorTester
         }
         if (Evaluator.Evaluate("5+5*2", null) == 15) Console.WriteLine("PEMDAS success");
         if (Evaluator.Evaluate("5-5+(5/5)*5", null) == 5) Console.WriteLine("Ultimate PEMDAS success");
-        if (Evaluator.Evaluate("X1+X1", (x) => 5) == 10) Console.WriteLine("Bananas");
+        if (Evaluator.Evaluate("X1+X1", (x) => 5) == 10) Console.WriteLine("Variable Success");
+        try
+        {
+            Evaluator.Evaluate("-A-", null);
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if(Evaluator.Evaluate("-5", null) == 5)
+            {
+                Console.WriteLine("subtract statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate("+5", null) == 5)
+            {
+                Console.WriteLine("addition statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate("*5", null) == 5)
+            {
+                Console.WriteLine("multiplication statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate("/5", null) == 5)
+            {
+                Console.WriteLine("division statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate("(5", null) == 5)
+            {
+                Console.WriteLine("open parentheses statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate(")5", null) == 5)
+            {
+                Console.WriteLine("closed parentheses statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+        try
+        {
+            if (Evaluator.Evaluate("(5)", null) == 5)
+            {
+                Console.WriteLine("in parentheses statement is valid");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Console.WriteLine("Invalid Expression Throws");
+            }
+        }
+
     }
 }
