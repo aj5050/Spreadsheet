@@ -20,6 +20,6 @@ Both stacks now reset upon running the evaluator method.
 # Time Spent
 Jan 11th: 1 1/2 hours
 <br>Jan 13th: 1 hour 10 min
-<br>Jan 15th: 12:00 - 12:25 1:00 - 2:13 7:55 - 8:00
-<br>Jan 16th: 11:25 am - 12pm 12:45pm - 1:45pm 2:10 pm - 2:50 pm
-<br>Jan 17th: 4:20 pm - 5:45 pm 7:30 - 8:40
+<br>Jan 15th: 12:00pm - 12:25pm 1:00pm - 2:13pm 7:55pm - 8:00pm
+<br>Jan 16th: 11:25am - 12pm 12:45pm - 1:45pm 2:10pm - 2:50pm
+<br>Jan 17th: 4:20pm - 5:45pm 7:30pm - 8:40pm
