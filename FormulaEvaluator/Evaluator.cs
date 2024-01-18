@@ -51,7 +51,7 @@ namespace FormulaEvaluator
             string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
             foreach (string substring in substrings)
             {
-                if(substring == "")
+                if (substring == "")
                 {
 
                 }
@@ -59,7 +59,7 @@ namespace FormulaEvaluator
                 else if (int.TryParse(substring, out int result))
                 {
                     valPush(result);
-                }                   
+                }
                 // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer,
                 // and all variables require a length of at least 2. 
                 else if (isVariable(substring))
@@ -70,7 +70,7 @@ namespace FormulaEvaluator
                 // (for the + and - operators) or pushes the operator onto the operatorStack
                 else if (substring == "+" || substring == "-" || substring == "*" || substring == "/")
                 {
-                    if (substring =="+" || substring == "-" )
+                    if (substring == "+" || substring == "-")
                     {
                         opPop();
                     }
@@ -110,7 +110,7 @@ namespace FormulaEvaluator
                     }
                 }
             }
-            if (operatorStack.Count != 0 && valueStack.Count>=2)
+            if (operatorStack.Count != 0 && valueStack.Count >= 2)
             {
                 if (operatorStack.Pop() == "+")
                 {
@@ -123,7 +123,7 @@ namespace FormulaEvaluator
                 }
             }
             //throw exception for empty valueStack
-            if(valueStack.Count == 0)
+            if (valueStack.Count == 0)
             {
                 throw new ArgumentException("the final result should be in the stack");
             }
@@ -160,7 +160,8 @@ namespace FormulaEvaluator
         /// <summary>
         /// This method pops the operator stack and uses that operator to add or subtract the top two integers of the value stack.
         /// </summary>
-        private static void opPop() {
+        private static void opPop()
+        {
             if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-") && valueStack.Count >= 2)
             {
                 if (operatorStack.Pop() == "+")
@@ -173,7 +174,7 @@ namespace FormulaEvaluator
                     valueStack.Push(valueStack.Pop() - temp1);
                 }
             }
-                
+
         }
         /// <summary>
         /// This method checks if the given string qualifies as a variable
@@ -191,9 +192,9 @@ namespace FormulaEvaluator
                     return true;
                 }
             }
-            
+
             return false;
         }
     }
-   
+
 }

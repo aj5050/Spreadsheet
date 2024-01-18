@@ -33,9 +33,11 @@ internal class FormulaEvaluatorTester
         try
         {
             Evaluator.Evaluate("5/0", null);
-        }catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            if(ex.GetType() == typeof(ArgumentException)) {
+            if (ex.GetType() == typeof(ArgumentException))
+            {
                 Console.WriteLine("Zero Exception Works");
             }
         }
@@ -55,7 +57,7 @@ internal class FormulaEvaluatorTester
         }
         try
         {
-            if(Evaluator.Evaluate("-5", null) == 5)
+            if (Evaluator.Evaluate("-5", null) == 5)
             {
                 Console.WriteLine("subtract statement is valid");
             }
