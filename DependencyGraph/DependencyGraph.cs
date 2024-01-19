@@ -3,7 +3,23 @@
 // Version 1.2 - Daniel Kopta 
 //               (Clarified meaning of dependent and dependee.)
 //               (Clarified names in solution/project structure.)
-
+/// <summary>
+/// Author:    Austin January
+/// Partner:   None
+/// Date:      1-11-2024
+/// Course:    CS 3500, University of Utah, School of Computing
+/// Copyright: CS 3500 and Austin January - This work may not 
+///            be copied for use in Academic Coursework.
+///
+/// I, Austin January, certify that I wrote this code from scratch and
+/// did not copy it in part or whole from another source.  All 
+/// references used in the completion of the assignments are cited 
+/// in my README file.
+///
+/// File Contents
+///     This file contains the FormulaEvaluator library, as well as the evaluator class and evaluator method along with it's private helper methods
+/// 
+/// </summary>
 using System;
 using System.Collections.Generic;
 using System.Linq;

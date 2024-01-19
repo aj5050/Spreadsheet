@@ -18,8 +18,13 @@ or a stack)
 <br>Jan 17th: Filled out the XML comments. Currently working on the delegate method. Figured out I didn't need to work on the delegate method, wrote more exceptions for Formula Evaluator (like if the valueStack is empty). Any "" token is now ignored.
 Both stacks now reset upon running the evaluator method. 
 # Time Spent
-Jan 11th: 1 1/2 hours
-<br>Jan 13th: 1 hour 10 min
-<br>Jan 15th: 12:00pm - 12:25pm 1:00pm - 2:13pm 7:55pm - 8:00pm 4hrs 10 min
-<br>Jan 16th: 11:25am - 12pm 12:45pm - 1:45pm 2:10pm - 2:50pm 6hrs 25 min
-<br>Jan 17th: 4:20pm - 5:45pm 7:30pm - 8:40pm 9 hrs total
+	Assigment 1: Estimated Hours : 17
+	Jan 11th: 1 1/2 hours
+	<br>Jan 13th: 1 hour 10 min
+	<br>Jan 15th: 12:00pm - 12:25pm 1:00pm - 2:13pm 7:55pm - 8:00pm 4hrs 10 min
+	<br>Jan 16th: 11:25am - 12pm 12:45pm - 1:45pm 2:10pm - 2:50pm 6hrs 25 min
+	<br>Jan 17th: 4:20pm - 5:45pm 7:30pm - 8:40pm 
+	<br>Total Hours: ~9 hrs
+	Assignment 2: Estimated Hours: 15
+	Jan 18th: 30 min
+	Jan 19th: 
