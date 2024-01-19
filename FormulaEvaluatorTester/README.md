@@ -9,15 +9,15 @@ Project: Formula Evaluator Tester
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
 # Comments to Evaluators:
-It's pretty straight forward, just some testing code. 
+    It's pretty straight forward, just some testing code. 
 
 # Assignment Specific Topics
-N/A
+    N/A
 
 
 # Consulted Peers:
 
-Talked with a T.A. but didn't catch her name. 
+    Talked with a T.A. but didn't catch her name. 
 
 # References:
 
