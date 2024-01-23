@@ -89,7 +89,15 @@ namespace FormulaEvaluator
                         //step one
                         opPop();
                         //step 2
-                        operatorStack.Pop();
+                        if(operatorStack.Count > 0)
+                        {
+                            operatorStack.Pop();
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Invalid Expression");
+                        }
+                        
                         //step 3
                         if (operatorStack.Count != 0 && valueStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                         {

@@ -58,15 +58,18 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class DependencyGraph
     {
-        private static Hashtable DG;
-        private static int size;
+        
+        private static Dictionary<string,string> dependents;
+        private static Dictionary<string, string> dependees;
+        private static int pairSize;
         /// <summary>
         /// Creates an empty DependencyGraph.
         /// </summary>
         public DependencyGraph()
         {
-            DG = new Hashtable();
-            size = 0;
+            dependents = new Dictionary<string,string>();
+            dependees = new Dictionary<string,string>();
+            pairSize = 0;
         }
 
 
@@ -75,7 +78,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int Size
         {
-            get { return size; }
+            get { return pairSize; }
         }
 
 
@@ -89,16 +92,7 @@ namespace SpreadsheetUtilities
         public int this[string s]
         {
             
-            get {
-                int dependees = 0;
-                foreach(string key in DG.Keys)
-                {
-                    if (DG[key]!=null && DG[key].Equals(s))
-                    {
-                        dependees++;
-                    }
-                }
-                return dependees; }
+            get {return dependees.Count; }
         }
 
 
@@ -107,7 +101,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            if (DG.ContainsKey(s) && DG[s]!= null)
+            if (dependees.ContainsKey(s))
             {
                 return true;
             }
@@ -123,7 +117,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            if (DG.ContainsValue(s))
+            if (dependents.ContainsKey(s))
             {
                 return true;
             }
@@ -141,13 +135,17 @@ namespace SpreadsheetUtilities
         public IEnumerable<string> GetDependents(string s)
         {
             ArrayList result = new ArrayList();
-            foreach (string key in DG.Keys)
+            if(HasDependents(s))
             {
-                if (key.Equals(s) && DG[key]!=null)
+                foreach (string key in dependents.Keys)
                 {
-                    result.Add(DG[key]);
+                    if (key.Equals(s) && dependents[key]!=null)
+                    {
+                        result.Add(dependents[key]);
+                    }
                 }
             }
+            
             return (string[])result.ToArray();
         }
 
@@ -159,9 +157,9 @@ namespace SpreadsheetUtilities
             ArrayList result = new ArrayList();
             if (HasDependees(s))
             {
-                foreach (string key in DG.Keys)
+                foreach (string key in dependees.Keys)
                 {
-                    if (DG[key] != null&& DG[key].Equals(s))
+                    if (dependees[key] != null&& dependees[key].Equals(s))
                     {
                         result.Add(key);
                     }
@@ -207,6 +205,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            foreach(string key in DG.Keys)
+            {
+                if (key.Equals(s))
+                {
+                    RemoveDependency(key, (string)DG[key]);
+                }
+            }
+            foreach(string value in newDependents)
+            {
+                AddDependency(s, value);
+            }
 
         }
 
@@ -217,6 +226,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
+            foreach (string value in DG.Values)
+            {
+                if (value.Equals(s))
+                {
+                    RemoveDependency((string)DG[value], s);
+                }
+            }
+            foreach (string key in newDependees)
+            {
+                AddDependency(key, s);
+            }
         }
 
     }
