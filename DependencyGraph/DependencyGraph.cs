@@ -58,18 +58,21 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class DependencyGraph
     {
-        
-        private static Dictionary<string,string> dependents;
-        private static Dictionary<string, string> dependees;
+        private static Dictionary<string,List<string>> DG;
+        private static List<string> dependentsList;
+  
         private static int pairSize;
+        private static int dependeeSize;
+
         /// <summary>
         /// Creates an empty DependencyGraph.
         /// </summary>
         public DependencyGraph()
         {
-            dependents = new Dictionary<string,string>();
-            dependees = new Dictionary<string,string>();
+            dependentsList = new List<string>();
+            DG = new Dictionary<string, List<string>>();
             pairSize = 0;
+            dependeeSize = DG.Count;
         }
 
 
@@ -92,7 +95,8 @@ namespace SpreadsheetUtilities
         public int this[string s]
         {
             
-            get {return dependees.Count; }
+            get {
+                return dependeeSize; }
         }
 
 
@@ -101,7 +105,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            if (dependees.ContainsKey(s))
+            if (DG.ContainsKey(s))
             {
                 return true;
             }
@@ -117,15 +121,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            if (dependents.ContainsKey(s))
+            foreach (string strings in dependentsList)
             {
-                return true;
+                if (strings.Equals(s))
+                {
+                    return true;
+                }
             }
-            else
-            {
-                return false;
-            }
-            
+            return false;
         }
 
 
@@ -134,19 +137,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            ArrayList result = new ArrayList();
+            
             if(HasDependents(s))
             {
-                foreach (string key in dependents.Keys)
-                {
-                    if (key.Equals(s) && dependents[key]!=null)
-                    {
-                        result.Add(dependents[key]);
-                    }
-                }
+                return DG[s];
             }
-            
-            return (string[])result.ToArray();
+            else
+            {
+                throw new ArgumentException("No Dependents Found");
+            }
         }
 
         /// <summary>
@@ -157,11 +156,11 @@ namespace SpreadsheetUtilities
             ArrayList result = new ArrayList();
             if (HasDependees(s))
             {
-                foreach (string key in dependees.Keys)
+                foreach(string key in DG.Keys)
                 {
-                    if (dependees[key] != null&& dependees[key].Equals(s))
+                    if (DG[key].Contains(s))
                     {
-                        result.Add(key);
+                        result.Add(DG[key]);
                     }
                 }
             }
@@ -182,8 +181,13 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t cannot be evaluated until s is</param>        /// 
         public void AddDependency(string s, string t)
         {
-            DG.Add(s, t);
-            size++;
+            if(!DG.TryGetValue(s, out dependentsList))
+            {
+                dependentsList = new List<string>();
+                DG.Add(s, dependentsList);
+            }
+            dependentsList.Add(t);
+            pairSize++;
         }
 
 
@@ -194,8 +198,20 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
-            DG.Remove(s);
-            size--;
+            if (DG.ContainsKey(s))
+            {
+                DG[s].Remove(t);
+                if (DG[s].Count == 0)
+                {
+                    DG.Remove(s);
+                }
+                pairSize--;
+            }
+            else
+            {
+                throw new ArgumentException("Dependency does not exist");
+            }
+            
         }
 
 
@@ -209,7 +225,7 @@ namespace SpreadsheetUtilities
             {
                 if (key.Equals(s))
                 {
-                    RemoveDependency(key, (string)DG[key]);
+                    RemoveDependency(key, key);
                 }
             }
             foreach(string value in newDependents)
@@ -226,11 +242,11 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            foreach (string value in DG.Values)
+            foreach (string key in DG.Keys)
             {
-                if (value.Equals(s))
+                if (DG[key].Contains(s))
                 {
-                    RemoveDependency((string)DG[value], s);
+                    RemoveDependency(key, s);
                 }
             }
             foreach (string key in newDependees)

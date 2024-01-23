@@ -30,4 +30,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Assignment 2: Estimated Hours: 15
 	Jan 18th: 30 min
 	Jan 19th: 30 min
-	Jan 23rd: 10:45am - 12:00pm 12:25pm - 1:45pm
+	Jan 23rd: 10:45am - 12:00pm 12:25pm - 1:45pm 2:10pm
