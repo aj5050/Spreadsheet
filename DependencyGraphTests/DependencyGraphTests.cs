@@ -6,7 +6,7 @@
 /// Copyright: CS 3500 and Austin January - This work may not 
 ///            be copied for use in Academic Coursework.
 ///
-/// I, Austin January, certify that I wrote this code from scratch and
+/// I, Austin January, certify that I wrote all code after the Stress Test from scratch and
 /// did not copy it in part or whole from another source.  All 
 /// references used in the completion of the assignments are cited 
 /// in my README file.
@@ -81,7 +81,7 @@ namespace DevelopmentTests
             t.ReplaceDependees("y", new HashSet<string>());
         }
         ///<summary>
-        ///It should be possibe to have more than one DG at a time.
+        ///It should be possible to have more than one DG at a time.
         ///</summary>
         [TestMethod()]
         public void StaticTest()
@@ -237,6 +237,39 @@ namespace DevelopmentTests
                 HashSet<string>(t.GetDependents(letters[i]))));
                 Assert.IsTrue(dees[i].SetEquals(new
                 HashSet<string>(t.GetDependees(letters[i]))));
+            }
+        }
+
+        [TestMethod()]
+        public void cyclicDependencyTest()
+        {
+            DependencyGraph t = new DependencyGraph();
+            
+            t.AddDependency("x", "y");
+            
+            Assert.AreEqual(t.Size, 1);
+            t.AddDependency("y", "x");
+            
+            Assert.AreEqual(t.Size, 2);
+            Assert.IsTrue(t.HasDependents("x"));
+            Assert.IsTrue(t.HasDependents("y"));
+            Assert.IsTrue(t.HasDependees("x"));
+            Assert.IsTrue(t.HasDependees("y"));
+            foreach(string dependee in t.GetDependees("x"))
+            {
+                Assert.IsTrue(dependee.Equals("y"));
+            }
+            foreach (string dependee in t.GetDependees("y"))
+            {
+                Assert.IsTrue(dependee.Equals("x"));
+            }
+            foreach (string dependent in t.GetDependents("x"))
+            {
+                Assert.IsTrue(dependent.Equals("y"));
+            }
+            foreach (string dependent in t.GetDependents("y"))
+            {
+                Assert.IsTrue(dependent.Equals("x"));
             }
         }
     }
