@@ -21,11 +21,10 @@ Copyright:  CS 3500 and Austin January - This work may not be copied for use in 
     Make sure you spell check your file (did you install the VS spell checker?) and use your best writing ability.
 
 # Consulted Peers:
-
-    List any peers (or other people) in the class (or outside for that matter) that you talked with about the project for more than one minute.
+    Ted Staros
 
 # References:
 
     1. c# dictionary How to add multiple values for single key? - https://stackoverflow.com/questions/10089850/c-sharp-dictionary-how-to-add-multiple-values-for-single-key
-    2. Title of page - URL
+    2. Visual Studio /**/ comment shortcut? - https://stackoverflow.com/questions/32426267/visual-studio-comment-shortcut
     3. Title of page - URL
