@@ -17,7 +17,8 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	----------------------------------
 	Jan 18th: Added some files for assignment 2, still need to add README files and "Extension" project
 	Jan 19th: Updated/Formated README files
-	Jan 23rd: Added Extension Library, filled all methods up to "RemoveDependency" in DependencyGraph. Adjusting methods using new Dictionary. All methods adjusted, ran tests, completed pre-tests, need to add more. 
+	Jan 23rd: Added Extension Library, filled all methods up to "RemoveDependency" in DependencyGraph. Adjusting methods using new Dictionary. All methods adjusted, ran tests, completed pre-tests, need to add more.
+	Jan 24th: Added Assignment 1 auto-grader tests, fixed bugs that were present in Evaluator.cs. Added more tests to DependencyGraphTests. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -31,3 +32,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 18th: 30 min
 	Jan 19th: 30 min
 	Jan 23rd: 10:45am - 12:00pm 12:25pm - 1:45pm 2:10pm 4:00pm - 5:22 pm
+	Jan 24th: 2:30pm - 3:30pm
