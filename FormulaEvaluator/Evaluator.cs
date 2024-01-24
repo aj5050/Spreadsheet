@@ -129,7 +129,17 @@ namespace FormulaEvaluator
                     int temp1 = valueStack.Pop();
                     valueStack.Push(valueStack.Pop() - temp1);
                 }
+            }else if( valueStack.Count < 2 && operatorStack.Count!=0 )
+            {
+                throw new ArgumentException("Invalid Expression");
             }
+            if( operatorStack.Count == 0 &&  valueStack.Count >1 ) {
+                throw new ArgumentException("Invalid Expression");
+            }
+            //else
+            //{
+            //    throw new ArgumentException("Invalid Expression");
+            //}
             //throw exception for empty valueStack
             if (valueStack.Count == 0)
             {
@@ -182,6 +192,7 @@ namespace FormulaEvaluator
                     valueStack.Push(valueStack.Pop() - temp1);
                 }
             }
+            
 
         }
         /// <summary>
