@@ -239,7 +239,9 @@ namespace DevelopmentTests
                 HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
-
+        /// <summary>
+        /// This test asserts that the Dependency Graph can be cyclic, with the dependee being a dependent on its dependent and the dependent being a dependee of its dependee
+        /// </summary>
         [TestMethod()]
         public void cyclicDependencyTest()
         {
@@ -271,6 +273,50 @@ namespace DevelopmentTests
             {
                 Assert.IsTrue(dependent.Equals("x"));
             }
+        }
+        /// <summary>
+        /// This test asserts that an empty graph throws an exception for remove (remove throws for both an empty graph and for a dependency that doesn't exist)
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void throwsTest()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.RemoveDependency("x","y");
+        }
+        [TestMethod()]
+        public void bracketsDependeesTest()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("x","y");
+            t.AddDependency("w", "y");
+            t.AddDependency("v", "y");
+            Assert.AreEqual(3, t["y"]);
+            t.RemoveDependency("x","y");
+            Assert.AreEqual(2, t["y"]);
+            t.RemoveDependency("w", "y");
+            t.RemoveDependency("v", "y");
+            Assert.AreEqual(0, t["y"]);
+            t.AddDependency("u", "y");
+            t = new DependencyGraph();
+            Assert.AreEqual(0, t["y"]);
+        }
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void removeAfterNoPairs()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("x", "y");
+            t.RemoveDependency("x", "y");
+            t.RemoveDependency("x", "y");
+        }
+        [TestMethod()]
+        public void addDuplicatePairsTest()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("x", "y");
+            t.AddDependency("x", "y");
+            Assert.IsTrue(t.Size == 1);
         }
     }
 }
