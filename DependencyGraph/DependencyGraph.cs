@@ -17,7 +17,7 @@
 /// in my README file.
 ///
 /// File Contents
-///     This file contains the FormulaEvaluator library, as well as the evaluator class and evaluator method along with it's private helper methods
+///     This file contains the DependencyGraph class and it's methods.
 /// 
 /// </summary>
 using System;
@@ -59,9 +59,9 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class DependencyGraph
     {
-        private Dictionary<string,List<string>> DG;
+        private Dictionary<string, List<string>> DG;
         private List<string> dependentsList;
-  
+
         private int pairSize;
 
         /// <summary>
@@ -93,8 +93,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int this[string s]
         {
-            
-            get {
+
+            get
+            {
                 if (HasDependees(s))
                 {
                     return GetDependees(s).Count();
@@ -112,7 +113,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            if (DG.ContainsKey(s))
+            //the dependent graph can contain a key with an empty list because of the remove method, to get around this added additional && statement
+            if (DG.ContainsKey(s) && DG[s].Count > 0)
             {
                 return true;
             }
@@ -128,12 +130,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            if(dependentsList.Contains(s))
+            //if it's in the dependent list it has to have a dependee
+            if (dependentsList.Contains(s))
             {
                 return true;
             }
-            
-            return false;
+            else
+            {
+                return false;
+            }
+
+
         }
 
 
@@ -142,6 +149,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
+            //returns an empty list if s has no dependents, returns dependents otherwise
             List<string> result = new List<string>();
             if (HasDependents(s))
             {
@@ -155,10 +163,11 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependees(string s)
         {
+            //returns an empty list if s has no dependees, otherwise returns list of dependees
             List<string> result = new List<string>();
             if (HasDependees(s))
             {
-                foreach(string key in DG.Keys)
+                foreach (string key in DG.Keys)
                 {
                     if (DG[key].Contains(s))
                     {
@@ -166,7 +175,7 @@ namespace SpreadsheetUtilities
                     }
                 }
             }
-           
+
             return result;
         }
 
@@ -183,19 +192,21 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t cannot be evaluated until s is</param>        /// 
         public void AddDependency(string s, string t)
         {
-            
+
             List<string> temp;
-            if(!DG.TryGetValue(s, out temp))
+            //if there is no list of dependents associated with s, then add s to the dictionary and put the dependent t in the pair list for s and in the private dependentList.
+            if (!DG.TryGetValue(s, out temp))
             {
                 temp = new List<string>();
                 DG.Add(s, temp);
-            }else
+
+
+            }//if a list of dependents is found with dependee s and the list already contains the dependent, do not add anything and return.
+            else if (temp.Contains(t))
             {
-                if(temp.Contains(t))
-                {
-                    return;
-                }
+                return;
             }
+            //if a list of dependents is found with dependee s but the list doesnt contain the dependent, add the dependent to the pair list for s and to the private dependentList.
             temp.Add(t);
             dependentsList.Add(t);
             pairSize++;
@@ -209,17 +220,18 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
-            //since AddDependecy does not add duplicates, it is safe to assume that you only need to remove the first instance of t.
-            if (DG.ContainsKey(s)&& pairSize > 0)
+            //since AddDependecy does not add duplicates, it is safe to assume that you only need to remove the first instance of t. Also remove first instance of t in dependent list
+            if (DG.ContainsKey(s) && pairSize > 0)
             {
                 DG[s].Remove(t);
-                pairSize--; 
-            }
+                pairSize--;
+                dependentsList.Remove(t);
+            }//if there are no more pairs or the pair doesn't exist, throw an exception
             else
             {
                 throw new ArgumentException("Dependency does not exist");
             }
-            
+
         }
 
 
@@ -229,19 +241,21 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
-            if(DG.ContainsKey(s))
+            //if the dependee exists, replace its dependents
+            if (DG.ContainsKey(s))
             {
+                //cannot use foreach loop, as the list changes when we remove a dependency.
                 for (int i = 0; DG[s].Count > 0; i++)
                 {
                     RemoveDependency(s, DG[s][i]);
                 }
-                foreach(string value in newDependents)
+                foreach (string value in newDependents)
                 {
                     AddDependency(s, value);
                 }
 
             }
-            
+
 
         }
 
@@ -252,14 +266,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            foreach (string key in GetDependees(s))
+            //if the dependent exists, replace its dependees
+            if (dependentsList.Contains(s))
             {
-                RemoveDependency(key, s);
+                foreach (string key in GetDependees(s))
+                {
+                    RemoveDependency(key, s);
+                }
+                foreach (string key in newDependees)
+                {
+                    AddDependency(key, s);
+                }
             }
-            foreach (string key in newDependees)
-            {
-                AddDependency(key, s);
-            }
+
         }
 
     }
