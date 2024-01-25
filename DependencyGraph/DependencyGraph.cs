@@ -61,7 +61,6 @@ namespace SpreadsheetUtilities
     {
         private Dictionary<string, List<string>> DG;
         private List<string> dependentsList;
-
         private int pairSize;
 
         /// <summary>
@@ -93,7 +92,6 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int this[string s]
         {
-
             get
             {
                 if (HasDependees(s))
@@ -139,8 +137,6 @@ namespace SpreadsheetUtilities
             {
                 return false;
             }
-
-
         }
 
 
@@ -175,7 +171,6 @@ namespace SpreadsheetUtilities
                     }
                 }
             }
-
             return result;
         }
 
@@ -192,7 +187,6 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t cannot be evaluated until s is</param>        /// 
         public void AddDependency(string s, string t)
         {
-
             List<string> temp;
             //if there is no list of dependents associated with s, then add s to the dictionary and put the dependent t in the pair list for s and in the private dependentList.
             if (!DG.TryGetValue(s, out temp))
@@ -231,7 +225,6 @@ namespace SpreadsheetUtilities
             {
                 throw new ArgumentException("Dependency does not exist");
             }
-
         }
 
 
@@ -253,10 +246,7 @@ namespace SpreadsheetUtilities
                 {
                     AddDependency(s, value);
                 }
-
             }
-
-
         }
 
 
@@ -278,9 +268,6 @@ namespace SpreadsheetUtilities
                     AddDependency(key, s);
                 }
             }
-
         }
-
     }
-
 }
