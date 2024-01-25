@@ -6,7 +6,7 @@
 /// <summary>
 /// Author:    Austin January
 /// Partner:   None
-/// Date:      1-11-2024
+/// Date:      1-18-2024
 /// Course:    CS 3500, University of Utah, School of Computing
 /// Copyright: CS 3500 and Austin January - This work may not 
 ///            be copied for use in Academic Coursework.
@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace SpreadsheetUtilities
@@ -62,7 +63,6 @@ namespace SpreadsheetUtilities
         private List<string> dependentsList;
   
         private int pairSize;
-        private int dependeeSize;
 
         /// <summary>
         /// Creates an empty DependencyGraph.
@@ -72,7 +72,6 @@ namespace SpreadsheetUtilities
             dependentsList = new List<string>();
             DG = new Dictionary<string, List<string>>();
             pairSize = 0;
-            dependeeSize = 0;
         }
 
 
@@ -96,7 +95,15 @@ namespace SpreadsheetUtilities
         {
             
             get {
-                return dependeeSize; }
+                if (HasDependees(s))
+                {
+                    return GetDependees(s).Count();
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
 
 
@@ -176,15 +183,21 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t cannot be evaluated until s is</param>        /// 
         public void AddDependency(string s, string t)
         {
+            
             List<string> temp;
             if(!DG.TryGetValue(s, out temp))
             {
                 temp = new List<string>();
                 DG.Add(s, temp);
+            }else
+            {
+                if(temp.Contains(t))
+                {
+                    return;
+                }
             }
             temp.Add(t);
             dependentsList.Add(t);
-            dependeeSize++;
             pairSize++;
         }
 
@@ -196,23 +209,11 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
-            //find out if you can use removeAll instead of RemoveAt (needs to be O(1))
-            if (DG.ContainsKey(s))
+            //since AddDependecy does not add duplicates, it is safe to assume that you only need to remove the first instance of t.
+            if (DG.ContainsKey(s)&& pairSize > 0)
             {
-                for(int i = 0; i < DG[s].Count; i++)
-                {
-                    if (DG[s][i].Equals(t))
-                    {
-                        DG[s].RemoveAt(i);
-                        pairSize--;
-                    }
-                    //if (DG[s].Count == 0)
-                    //{
-                    //    DG.Remove(s);
-                    //}
-                }
-                
-                
+                DG[s].Remove(t);
+                pairSize--; 
             }
             else
             {
@@ -228,25 +229,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
-            foreach(string key in DG.Keys)
+            if(DG.ContainsKey(s))
             {
-                if (key.Equals(s))
+                for (int i = 0; DG[s].Count > 0; i++)
                 {
-                    for (int i = 0; DG[key].Count > 0; i++)
-                    {
-                        RemoveDependency(key, DG[key][i]);
-                    }
-                    //foreach(string values in DG[key])
-                    //{
-                    //    RemoveDependency(key, values);
-                    //}
-                    
+                    RemoveDependency(s, DG[s][i]);
                 }
+                foreach(string value in newDependents)
+                {
+                    AddDependency(s, value);
+                }
+
             }
-            foreach(string value in newDependents)
-            {
-                AddDependency(s, value);
-            }
+            
 
         }
 
@@ -257,12 +252,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            foreach (string key in DG.Keys)
+            foreach (string key in GetDependees(s))
             {
-                if (DG[key].Contains(s))
-                {
-                    RemoveDependency(key, s);
-                }
+                RemoveDependency(key, s);
             }
             foreach (string key in newDependees)
             {
