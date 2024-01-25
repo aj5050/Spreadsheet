@@ -12,7 +12,7 @@
 /// in my README file.
 ///
 /// File Contents
-///   
+///   This file contains tests for the DependencyGraph project. 
 /// 
 /// </summary>
 using System;
@@ -245,19 +245,19 @@ namespace DevelopmentTests
         [TestMethod()]
         public void cyclicDependencyTest()
         {
+            //create cycle
             DependencyGraph t = new DependencyGraph();
-            
             t.AddDependency("x", "y");
-            
             Assert.AreEqual(t.Size, 1);
             t.AddDependency("y", "x");
-            
             Assert.AreEqual(t.Size, 2);
+            //assert that both have dependents and dependees
             Assert.IsTrue(t.HasDependents("x"));
             Assert.IsTrue(t.HasDependents("y"));
             Assert.IsTrue(t.HasDependees("x"));
             Assert.IsTrue(t.HasDependees("y"));
-            foreach(string dependee in t.GetDependees("x"))
+            //assert that the dependents and dependees are in a cycle (x is a dependent/dependee of y and vice versa)
+            foreach (string dependee in t.GetDependees("x"))
             {
                 Assert.IsTrue(dependee.Equals("y"));
             }
@@ -282,25 +282,35 @@ namespace DevelopmentTests
         public void throwsTest()
         {
             DependencyGraph t = new DependencyGraph();
-            t.RemoveDependency("x","y");
+            t.RemoveDependency("x", "y");
         }
+        /// <summary>
+        /// This test asserts that the overwritten syntax of the brackets counts the amount of dependees for the given string
+        /// </summary>
         [TestMethod()]
         public void bracketsDependeesTest()
         {
+            //add 3 dependencies
             DependencyGraph t = new DependencyGraph();
-            t.AddDependency("x","y");
+            t.AddDependency("x", "y");
             t.AddDependency("w", "y");
             t.AddDependency("v", "y");
             Assert.AreEqual(3, t["y"]);
-            t.RemoveDependency("x","y");
+            //remove a dependency
+            t.RemoveDependency("x", "y");
             Assert.AreEqual(2, t["y"]);
+            //remove all dependencies
             t.RemoveDependency("w", "y");
             t.RemoveDependency("v", "y");
             Assert.AreEqual(0, t["y"]);
+            //add another dependency to assert that when a new graph is created the dependees go back down to zero
             t.AddDependency("u", "y");
             t = new DependencyGraph();
             Assert.AreEqual(0, t["y"]);
         }
+        /// <summary>
+        /// This test asserts that an exception is thrown if there are no more pairs in the graph or the pair provided by the parameter does not exist
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void removeAfterNoPairs()
@@ -310,11 +320,17 @@ namespace DevelopmentTests
             t.RemoveDependency("x", "y");
             t.RemoveDependency("x", "y");
         }
+        /// <summary>
+        /// This test asserts that duplicate pairs cannot be added into the graph
+        /// </summary>
         [TestMethod()]
         public void addDuplicatePairsTest()
         {
             DependencyGraph t = new DependencyGraph();
+            Assert.IsTrue(t.Size == 0);
+            //add two pairs and make sure the size doesn't increase/ the duplicate dependency is not added
             t.AddDependency("x", "y");
+            Assert.IsTrue(t.Size == 1);
             t.AddDependency("x", "y");
             Assert.IsTrue(t.Size == 1);
         }
