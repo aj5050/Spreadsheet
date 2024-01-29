@@ -38,6 +38,8 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	for loops in methods like
 	GetDependents/Dependees. Added some more conditions to prevent bugs, wrote comments, finished first 
 	draft.
+	----------------------------------
+	Jan 29th: Added the Formula.cs API, read through instructions. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -47,10 +49,13 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 17th: 4:20pm - 5:45pm 7:30pm - 8:40pm 
 	Assignment 1 Total Hours: ~9 hrs
 	----------------------------------
-	Assignment 2: Estimated Hours: 15
+	Assignment 2: Estimated Hours: 15 hrs
 	Jan 18th: 30 min
 	Jan 19th: 30 min 
 	Jan 23rd: 10:45am - 12:00pm 12:25pm - 1:45pm 2:10pm - 3:20pm 4:00pm - 5:22 pm 
 	Jan 24th: 2:30pm - 3:30pm 
 	Jan 25th: 10:45am - 12:05pm 2:00pm - 3:10pm 
 	Assignment 2 Total Hours: ~9 hours 50 minutes
+	----------------------------------
+	Assignment 3 Estimated Hours: 13 hrs
+	Jan 29th: 1:00pm - 1:20pm
