@@ -15,7 +15,22 @@
 // Change log:
 //  (Version 1.2) Changed the definition of equality with regards
 //                to numeric tokens
-
+/// <summary>
+/// Author:    Austin January
+/// Partner:   None
+/// Date:      1-30-2024
+/// Course:    CS 3500, University of Utah, School of Computing
+/// Copyright: CS 3500 and Austin January - This work may not 
+///            be copied for use in Academic Coursework.
+///
+/// I, Austin January, certify that I wrote this code from scratch and
+/// did not copy it in part or whole from another source.  All 
+/// references used in the completion of the assignments are cited 
+/// in my README file.
+///
+/// File Contents
+///    
+/// </summary>
 
 using System;
 using System.Collections.Generic;
@@ -56,6 +71,7 @@ namespace SpreadsheetUtilities
     public Formula(String formula) :
         this(formula, s => s, s => true)
     {
+
     }
 
     /// <summary>
