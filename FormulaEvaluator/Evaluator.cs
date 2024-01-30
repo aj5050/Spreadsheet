@@ -136,10 +136,7 @@ namespace FormulaEvaluator
             if( operatorStack.Count == 0 &&  valueStack.Count >1 ) {
                 throw new ArgumentException("Invalid Expression");
             }
-            //else
-            //{
-            //    throw new ArgumentException("Invalid Expression");
-            //}
+            
             //throw exception for empty valueStack
             if (valueStack.Count == 0)
             {
