@@ -220,11 +220,8 @@ namespace SpreadsheetUtilities
                 DG[s].Remove(t);
                 pairSize--;
                 dependentsList.Remove(t);
-            }//if there are no more pairs or the pair doesn't exist, throw an exception
-            else
-            {
-                throw new ArgumentException("Dependency does not exist");
-            }
+            }//if there are no more pairs or the pair doesn't exist, continue
+          
         }
 
 
@@ -238,7 +235,7 @@ namespace SpreadsheetUtilities
             if (DG.ContainsKey(s))
             {
                 //cannot use foreach loop, as the list changes when we remove a dependency.
-                for (int i = 0; DG[s].Count > 0; i++)
+                for (int i = DG[s].Count - 1; i >= 0; i--)
                 {
                     RemoveDependency(s, DG[s][i]);
                 }
