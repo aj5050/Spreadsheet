@@ -16,8 +16,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 
 
 # Consulted Peers:
-
-    I talked with a T.A. but I didn't catch her name. 
+    Matt World
 
 # References:
 
