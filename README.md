@@ -42,6 +42,9 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 29th: Added the Formula.cs API, read through instructions.
 	Jan 30th: Added test file for Formula.cs, added README files for both classes, added helper methods
 	to Extensions (need to add header comment and README file), implemented parsing rules for Formula
+	Jan 31st: Added a README file to Extensions as well as more helper methods, wrote most the code for 
+	Formula (still need to write GetHashCode method), fixed all bugs presented by Assignment 2 autoGrader
+	tests. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -62,3 +65,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Assignment 3 Estimated Hours: 13 hrs
 	Jan 29th: 1:00pm - 1:20pm
 	Jan 30th: 12:40pm - 12:55pm 3:40pm - 5:20pm
+	Jan 31st: 2:30pm - 4:50pm
