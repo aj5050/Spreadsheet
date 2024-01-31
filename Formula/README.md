@@ -4,7 +4,7 @@ Start Date: 01-30-2024
 Course: CS 3500, University of Utah, School of Computing
 GitHub ID: aj5050
 Repo: https://github.com/aj5050/Spreadsheet
-Commit Date: 1-17-2024
+Commit Date: 1-  -2024
 Project: Formula
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
@@ -20,7 +20,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 
 # References:
 
-    1. Title of page - URL
+    1. Object.GetType Method - https://learn.microsoft.com/en-us/dotnet/api/system.object.gettype?view=net-8.0
     2. Title of page - URL
     3. Title of page - URL
 

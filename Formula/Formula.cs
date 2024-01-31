@@ -62,6 +62,7 @@ namespace SpreadsheetUtilities
     public class Formula
     {
         private string expression;
+        private Func<string, string> normalizer;
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
@@ -103,6 +104,7 @@ namespace SpreadsheetUtilities
             int openingParentheses = 0;
             int closingParentheses = 0;
             string prevToken = "";
+            normalizer = normalize;
             // loop through and find variables
             if (formula == null)
             {
@@ -120,7 +122,7 @@ namespace SpreadsheetUtilities
             }
             foreach (string token in GetTokens(formula))
             {  
-                if (!double.TryParse(token,out double value)&& !token.Equals("(") && !token.Equals(")") && !token.Equals("+") && !token.Equals("-") && !token.Equals("*") && !token.Equals("/"))
+                if (Extensions.Extensions.isTokenVariable(token))
                 {
                     if (!isValid(normalize(token)))
                     {
@@ -196,7 +198,7 @@ namespace SpreadsheetUtilities
                 }
                 // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer,
                 // and all variables require a length of at least 2. 
-                else if (Extensions.Extensions.isVariable(substring))
+                else if (Extensions.Extensions.isTokenVariable(substring))
                 {
                     Extensions.Extensions.valPush(lookup(substring),operatorStack,valueStack);
                 }
@@ -277,7 +279,28 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            return null;
+            List<String> variables = new List<String>();
+            if(normalizer != null)
+            {
+                foreach(string token in GetTokens(expression))
+                {
+                    if(Extensions.Extensions.isTokenVariable(token) && !variables.Contains(normalizer(token)))
+                    {
+                        variables.Add(normalizer(token));
+                    }
+                }
+            }
+            else
+            {
+                foreach (string token in GetTokens(expression))
+                {
+                    if (Extensions.Extensions.isTokenVariable(token) && !variables.Contains(token))
+                    {
+                        variables.Add(token);
+                    }
+                }
+            }
+            return variables;
         }
 
         /// <summary>
@@ -292,7 +315,30 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override string ToString()
         {
-            return null;
+            StringBuilder sb = new StringBuilder();
+            if(normalizer == null)
+            {
+                foreach(string token in GetTokens(expression))
+                {
+                    if(token!= " ")
+                    {
+                        sb.Append(token);
+                    }
+                    
+                }
+            }
+            else
+            {
+                foreach (string token in GetTokens(expression))
+                {
+                    if (token != " ")
+                    {
+                        sb.Append(normalizer(token));
+                    }
+
+                }
+            }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -319,7 +365,68 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object? obj)
         {
-            return false;
+            
+            if (obj != null && obj.GetType() == typeof(Formula))
+            {
+                string[] substrings = Regex.Split(expression.Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)|( )|()");
+                string[] objSubstrings = Regex.Split(obj.ToString().Trim(), "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)|( )|()");
+                if (normalizer == null)
+                {
+                    for (int i = 0; i < substrings.Length; i++)
+                    {
+                        if (double.TryParse(substrings[i], out double result) && double.TryParse(objSubstrings[i], out double objResult))
+                        {
+                            if(result == objResult)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }else if (!substrings[i].Equals(objSubstrings[i]))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < substrings.Length; i++)
+                    {
+                        if (double.TryParse(substrings[i], out double result) && double.TryParse(objSubstrings[i], out double objResult))
+                        {
+                            if (result == objResult)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }else if (Extensions.Extensions.isTokenVariable(substrings[i]) && Extensions.Extensions.isTokenVariable(objSubstrings[i]))
+                        {
+                            if (normalizer(substrings[i]) == normalizer(objSubstrings[i]))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (!substrings[i].Equals(objSubstrings[i]))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                return false; 
+            }
+            return true;
         }
 
         /// <summary>
@@ -329,7 +436,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            return false;
+            return f1.Equals(f2);
         }
 
         /// <summary>
@@ -339,7 +446,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            return false;
+            return !f1.Equals(f2);
         }
 
         /// <summary>
