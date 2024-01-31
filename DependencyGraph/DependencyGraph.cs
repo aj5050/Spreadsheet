@@ -221,7 +221,7 @@ namespace SpreadsheetUtilities
                 pairSize--;
                 dependentsList.Remove(t);
             }//if there are no more pairs or the pair doesn't exist, continue
-          
+
         }
 
 
@@ -254,16 +254,13 @@ namespace SpreadsheetUtilities
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
             //if the dependent exists, replace its dependees
-            if (dependentsList.Contains(s))
+            foreach (string key in GetDependees(s))
             {
-                foreach (string key in GetDependees(s))
-                {
-                    RemoveDependency(key, s);
-                }
-                foreach (string key in newDependees)
-                {
-                    AddDependency(key, s);
-                }
+                RemoveDependency(key, s);
+            }
+            foreach (string key in newDependees)
+            {
+                AddDependency(key, s);
             }
         }
     }
