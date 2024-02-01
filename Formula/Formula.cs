@@ -62,7 +62,7 @@ namespace SpreadsheetUtilities
     public class Formula
     {
         private string expression;
-        private Func<string, string> normalizer;
+        private Func<string, string> normalizer = null;
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
@@ -104,56 +104,78 @@ namespace SpreadsheetUtilities
             int openingParentheses = 0;
             int closingParentheses = 0;
             string prevToken = "";
-            normalizer = normalize;
-            // loop through and find variables
+            if(normalize != null)
+            {
+                normalizer = normalize;
+            }
+            
+            //throw for null formula
             if (formula == null)
             {
-                throw new ArgumentNullException("formula cannot be empty");
+                throw new FormulaFormatException("formula cannot be empty");
             }
+            //get the first token, and if it isn't a number/ an open parentheses, or is an operator, throw an exception
             string firstItem = GetTokens(formula).First();
-            if(!double.TryParse(firstItem, out double num) || !firstItem.Equals("(") || !isValid(normalize(firstItem)))
+            if(!double.TryParse(firstItem, out double num) && !firstItem.Equals("(") && Extensions.Extensions.isTokenOperator(firstItem))
             {
-                throw new ArgumentException("Invalid Formula");
+                throw new FormulaFormatException("Invalid Formula");
             }
+            //get the last token, and if it isn't a number/ a closed parentheses, or is an operator, throw an exception
             string lastItem = GetTokens(formula).Last();
-            if (!double.TryParse(lastItem, out double val) || !lastItem.Equals(")") || !isValid(normalize(lastItem)))
+            if (!double.TryParse(lastItem, out double val) && !lastItem.Equals(")") && Extensions.Extensions.isTokenOperator(lastItem))
             {
-                throw new ArgumentException("Invalid Formula");
+                throw new FormulaFormatException("Invalid Formula");
             }
+            // loop through and find tokens
             foreach (string token in GetTokens(formula))
             {  
                 if (Extensions.Extensions.isTokenVariable(token))
                 {
+                    //if there is no isValid or normailze function, then this if statement gets skipped
                     if (!isValid(normalize(token)))
                     {
                         throw new FormulaFormatException("The formula contains an illegal variable");
                     }
                 }
+                //check if the token is a parentheses and make sure there are never more closing parentheses than opening parentheses
                 else if (token.Equals(")") || token.Equals("("))
                 {
                     if(token=="(")
                     {
                         openingParentheses++;
                     }
-                    else if (token == ")" && closingParentheses > openingParentheses)
-                    {
-                        throw new ArgumentException("too many closing parentheses");
-                    }
                     else
                     {
                         closingParentheses++;
+                        
                     }
-                }else if((prevToken.Equals("(") || prevToken.Equals("+") || prevToken.Equals("-") || prevToken.Equals("*") || prevToken.Equals("/")) && !double.TryParse(token, out double tokenVal)&& !isValid(normalize(token))&& !token.Equals("(")) {
-                    throw new ArgumentException("Invalid Formula");
-                }else if((prevToken == ")" || double.TryParse(prevToken, out double result) || isValid(normalize(prevToken))) && !token.Equals("+") && !token.Equals("-") && !token.Equals("*") && !token.Equals("/") && !token.Equals(")"))
+                    if(closingParentheses > openingParentheses)
+                    {
+                        throw new FormulaFormatException("too many closing parentheses");
+                    }
+                }
+                //Parentheses/Operator Following Rule
+                if((prevToken.Equals("(") || Extensions.Extensions.isTokenOperator(prevToken)) && (Extensions.Extensions.isTokenOperator(token) || token.Equals(")"))) {
+                    throw new FormulaFormatException("Invalid Formula");
+                }
+                //Extra Following Rule
+                else if((prevToken == ")" || double.TryParse(prevToken, out double result) || Extensions.Extensions.isTokenVariable(prevToken)) && !Extensions.Extensions.isTokenOperator(token) && !token.Equals(")"))
                 {
-                    throw new ArgumentException("Invalid Formula");
+                    throw new FormulaFormatException("Invalid Formula");
+                }
+                //Division by zero exception
+                else if(prevToken.Equals("/") && double.TryParse(token, out double output)){
+                    if(output == 0.0)
+                    {
+                        throw new FormulaFormatException("cannot divide by zero");
+                    }
                 }
                 prevToken = token;
             }
+            // if opening parentheses are greater than closing parentheses, throw an exception
             if (openingParentheses > closingParentheses)
             {
-                throw new ArgumentException("too many opening parentheses");
+                throw new FormulaFormatException("too many opening parentheses");
             }
             expression = formula;
         }
@@ -187,12 +209,8 @@ namespace SpreadsheetUtilities
             string[] substrings = GetTokens(expression).ToArray();
             foreach (string substring in substrings)
             {
-                if (substring == "" || substring == " ")
-                {
-                    continue;
-                }
                 // this if statement asserts if the substring is an integer or not, and if it is, it calls the valPush helper method. 
-                else if (double.TryParse(substring, out double result))
+                if (double.TryParse(substring, out double result))
                 {
                     Extensions.Extensions.valPush(result,operatorStack,valueStack);
                 }
@@ -237,9 +255,6 @@ namespace SpreadsheetUtilities
                             if (operatorStack.Pop() == "*")
                             {
                                 valueStack.Push(valueStack.Pop() * temp1);
-                            }else if (temp1 == 0)
-                            {
-                                continue;
                             }
                             else
                             {
@@ -456,7 +471,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override int GetHashCode()
         {
-            return 0;
+            Random rand = new Random();
+            return rand.Next(GetTokens(expression).Count(), 100000);
         }
 
         /// <summary>

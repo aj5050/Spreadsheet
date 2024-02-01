@@ -21,7 +21,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 # References:
 
     1. Object.GetType Method - https://learn.microsoft.com/en-us/dotnet/api/system.object.gettype?view=net-8.0
-    2. Title of page - URL
+    2. Func<T,TResult> Delegate - https://learn.microsoft.com/en-us/dotnet/api/system.func-2?view=net-8.0
     3. Title of page - URL
 
 
