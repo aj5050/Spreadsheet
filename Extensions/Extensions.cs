@@ -92,7 +92,15 @@ namespace Extensions
         }
         public static bool isTokenVariable(string token)
         {
-            if(!double.TryParse(token, out double value) && !token.Equals("(") && !token.Equals(")") && !token.Equals("+") && !token.Equals("-") && !token.Equals("*") && !token.Equals("/"))
+            if(!double.TryParse(token, out double value) && !token.Equals("(") && !token.Equals(")") && !token.Equals("+") && !token.Equals("-") && !token.Equals("*") && !token.Equals("/") && !token.Equals(""))
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool isTokenOperator(string token)
+        {
+            if (token.Equals("+") || token.Equals("-") || token.Equals("*") || token.Equals("/"))
             {
                 return true;
             }
