@@ -47,7 +47,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	tests. 
 	Feb 1st: Wrote 16 test cases specifically for throwing exceptions, fixed bugs presented by these 
 	tests. Also commented why the exceptions are throwing. Wrote 21 test cases for Evaluator method and 
-	GetVariable method. 
+	GetVariable method. Added 10 more tests to get more coverage, fixed bugs presented by these tests.
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -69,4 +69,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 29th: 1:00pm - 1:20pm
 	Jan 30th: 12:40pm - 12:55pm 3:40pm - 5:20pm
 	Jan 31st: 2:30pm - 4:50pm
-	Feb 1st: 10:50am - 11:55am 12:15pm - 1:45pm 2:05pm - 3:15pm
+	Feb 1st: 10:50am - 11:55am 12:15pm - 1:45pm 2:05pm - 3:15pm 3:45pm - 5:25pm
