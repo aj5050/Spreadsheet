@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Author:    Austin January
@@ -37,10 +38,6 @@ namespace Extensions
                 {
                     valueStack.Push(valueStack.Pop() * input);
                 }
-                else if (input == 0)
-                {
-                    throw new ArgumentException("Cannot Divide By 0");
-                }
                 else
                 {
                     valueStack.Push(valueStack.Pop() / input);
@@ -71,33 +68,25 @@ namespace Extensions
 
 
         }
-        /// <summary>
-        /// This method checks if the given string qualifies as a variable
-        /// </summary>
-        /// <param name="potentialVar"> The string that is being evaluated as a variable </param>
-        /// <returns> A true/false statement based on whether the string qualifies as a variable </returns>
-        public static bool isVariable(string potentialVar)
-        {
-            if (potentialVar.Length > 1)
-            {
-                Char varStart = potentialVar.ToCharArray()[0];
-                bool intExists = int.TryParse(potentialVar.ToCharArray().Last().ToString(), out int varTypeEnd);
-                if (char.IsLetter(varStart) && intExists)
-                {
-                    return true;
-                }
-            }
 
-            return false;
-        }
+        /// <summary>
+        /// This method checks if the given token qualifies as a variable
+        /// </summary>
+        /// <param name="token"> The token that is being evaluated as a variable </param>
+        /// <returns>A true/false statement based on whether the token qualifies as a variable </returns>
         public static bool isTokenVariable(string token)
         {
-            if(!double.TryParse(token, out double value) && !token.Equals("(") && !token.Equals(")") && !token.Equals("+") && !token.Equals("-") && !token.Equals("*") && !token.Equals("/") && !token.Equals(""))
+            if (!double.TryParse(token, out double value) && Regex.IsMatch(token, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*"))
             {
                 return true;
             }
             return false;
         }
+        /// <summary>
+        /// This method checks if the given token qualifies as an operator
+        /// </summary>
+        /// <param name="token"> the token that is being evaluated as an operator </param>
+        /// <returns> A true/false statement based on whether or not the token qualifies as an operator </returns>
         public static bool isTokenOperator(string token)
         {
             if (token.Equals("+") || token.Equals("-") || token.Equals("*") || token.Equals("/"))
