@@ -4,13 +4,12 @@ Start Date: 01-30-2024
 Course: CS 3500, University of Utah, School of Computing
 GitHub ID: aj5050
 Repo: https://github.com/aj5050/Spreadsheet
-Commit Date: 1-  -2024
+Commit Date: 2-1-2024
 Project: Formula
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
 # Comments to Evaluators:
-    I had to set up a new file because I made the Formula Evaluator a Console Application instead of a Library, so if there are any additional files name Formula Evaluator that's what happened. Also I added 3 private helper methods, two are just code that was used often, and one is to check if a string is a variable or not. 
-
+    Code stands on it's own. 
 # Assignment Specific Topics
     I didn't find any specific topics to write about on this assignment.
 
@@ -22,6 +21,6 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 
     1. Object.GetType Method - https://learn.microsoft.com/en-us/dotnet/api/system.object.gettype?view=net-8.0
     2. Func<T,TResult> Delegate - https://learn.microsoft.com/en-us/dotnet/api/system.func-2?view=net-8.0
-    3. Title of page - URL
+    3. IsMatch(String, String, RegexOptions) - https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.ismatch?view=net-8.0
 
 

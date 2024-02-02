@@ -29,7 +29,7 @@
 /// in my README file.
 ///
 /// File Contents
-///    
+///    The formula constructor, formula evaluator, formula ToString method, formula Equals method, overwritten == and != operators, formula getHashCode method, formula getVariables method, formula getTokens method, and FormulaFormat exception and Formula Error.
 /// </summary>
 
 using System;
@@ -62,7 +62,7 @@ namespace SpreadsheetUtilities
     public class Formula
     {
         private string expression;
-    
+
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
@@ -104,7 +104,7 @@ namespace SpreadsheetUtilities
             int openingParentheses = 0;
             int closingParentheses = 0;
             string prevToken = "";
-  
+
 
             //throw for null formula
             if (formula == null)
@@ -128,7 +128,7 @@ namespace SpreadsheetUtilities
             {
                 if (Extensions.Extensions.isTokenVariable(token))
                 {
-                    //if there is no isValid or normailze function, then this if statement gets skipped
+                    //if there is no isValid or normalize function, then this if statement gets skipped
                     if (!isValid(normalize(token)))
                     {
                         throw new FormulaFormatException("The formula contains an illegal variable");
@@ -161,7 +161,7 @@ namespace SpreadsheetUtilities
                 {
                     throw new FormulaFormatException("Invalid Formula");
                 }
- 
+
                 prevToken = token;
             }
             // if opening parentheses are greater than closing parentheses, throw an exception
@@ -169,19 +169,19 @@ namespace SpreadsheetUtilities
             {
                 throw new FormulaFormatException("too many opening parentheses");
             }
-            
+
             //normalize all tokens in formula and then put that in the expression
             StringBuilder sb = new StringBuilder();
-            
-                foreach (string token in GetTokens(formula))
-                {
-                    if (token != " ")
-                    {
-                        sb.Append(normalize(token));
-                    }
 
+            foreach (string token in GetTokens(formula))
+            {
+                if (token != " ")
+                {
+                    sb.Append(normalize(token));
                 }
-            
+
+            }
+
             expression = sb.ToString();
         }
 
@@ -214,17 +214,17 @@ namespace SpreadsheetUtilities
             string[] substrings = GetTokens(expression).ToArray();
             foreach (string substring in substrings)
             {
-                // this if statement asserts if the substring is an integer or not, and if it is, it calls the valPush helper method. 
+                // this if statement asserts if the substring is an double or not, and if it is, it calls the valPush helper method. 
                 if (double.TryParse(substring, out double result))
                 {
 
-                    if(result == 0 && operatorStack.Count>0 && operatorStack.Peek()=="/")
+                    if (result == 0 && operatorStack.Count > 0 && operatorStack.Peek() == "/")
                     {
                         return new FormulaError();
                     }
                     Extensions.Extensions.valPush(result, operatorStack, valueStack);
                 }
-                // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an integer,
+                // this else if statement will assert that the given string is a variable, as the initial if statement shows that it is not an double,
                 // and all variables require a length of at least 2. 
                 else if (Extensions.Extensions.isTokenVariable(substring))
                 {
@@ -269,7 +269,8 @@ namespace SpreadsheetUtilities
                             if (operatorStack.Pop() == "*")
                             {
                                 valueStack.Push(valueStack.Pop() * temp1);
-                            }else if(temp1 == 0)
+                            }
+                            else if (temp1 == 0)
                             {
                                 return new FormulaError("Cannot divide by zero");
                             }
@@ -312,15 +313,15 @@ namespace SpreadsheetUtilities
         public IEnumerable<String> GetVariables()
         {
             List<String> variables = new List<String>();
-            
-                foreach (string token in GetTokens(expression))
+
+            foreach (string token in GetTokens(expression))
+            {
+                if (Extensions.Extensions.isTokenVariable(token) && !variables.Contains(token))
                 {
-                    if (Extensions.Extensions.isTokenVariable(token) && !variables.Contains(token))
-                    {
-                        variables.Add(token);
-                    }
+                    variables.Add(token);
                 }
-           
+            }
+
             return variables;
         }
 
@@ -377,11 +378,12 @@ namespace SpreadsheetUtilities
                 {
                     return false;
                 }
-            }else
+            }
+            else
             {
                 return false;
             }
-            
+
         }
 
         /// <summary>
@@ -411,7 +413,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override int GetHashCode()
         {
-            
+
             return expression.GetHashCode();
 
         }
