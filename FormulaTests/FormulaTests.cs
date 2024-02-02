@@ -22,7 +22,7 @@ namespace FormulaTests
     public class FormulaTests
     {
         Func<string, string> normalizer = token => token.ToUpper();
-        Func<string, bool> isValid = token => token.Equals("X")||token.Equals("Y");
+        Func<string, bool> isValid = token => token.Equals("X") || token.Equals("Y");
         // ************************** Exception Tests ************************* //
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
@@ -64,7 +64,7 @@ namespace FormulaTests
         [ExpectedException(typeof(FormulaFormatException))]
         public void TestFormulaInvalidEndVariable()
         {
-            Formula f = new Formula("1+z",normalizer,isValid);
+            Formula f = new Formula("1+z", normalizer, isValid);
         }
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
@@ -115,21 +115,15 @@ namespace FormulaTests
             Formula f = new Formula("1+x(+5");
         }
         [TestMethod]
-        [ExpectedException(typeof(FormulaFormatException))]
-        public void TestFormulaDivisionByZero()
-        {
-            Formula f = new Formula("1/0");
-        }
-        [TestMethod]
-        public void TestFormulaLegalVariable() 
+        public void TestFormulaLegalVariable()
         {
             Formula f = new Formula("1+z+3");
         }
-        
+
         [TestMethod]
         public void TestFormulaValidLegalVariable()
         {
-            Formula f = new Formula("1+x+3",normalizer,isValid);
+            Formula f = new Formula("1+x+3", normalizer, isValid);
         }
         // ************************** Evaluator Tests ************************* //
         [TestMethod]
@@ -201,7 +195,7 @@ namespace FormulaTests
         [TestMethod]
         public void TestFormulaEvaluateVariables()
         {
-            Formula f = new Formula("x+x",normalizer,isValid);
+            Formula f = new Formula("x+x", normalizer, isValid);
             Assert.IsTrue(f.Evaluate((X) => 5).ToString() == "10");
         }
         [TestMethod]
@@ -217,10 +211,47 @@ namespace FormulaTests
             Assert.IsTrue(f.Evaluate((X) => 5).ToString() == "1");
         }
         [TestMethod]
+
         public void TestFormulaEvaluateMultiplicationInParentheses()
         {
             Formula f = new Formula("(x*5)", normalizer, isValid);
             Assert.IsTrue(f.Evaluate((X) => 5).ToString() == "25");
+        }
+        [TestMethod]
+        public void TestFormulaEvaluateScientificNotation()
+        {
+            Formula f = new Formula("10e2 *5", normalizer, isValid);
+            Assert.AreEqual(f.Evaluate(null).ToString() , "5000");
+        }
+        [TestMethod]
+        public void TestFormulaEvaluate()
+        {
+            Formula f = new Formula("100*5", normalizer, isValid);
+            Assert.AreEqual(f.Evaluate(null).ToString(), "500");
+        }
+        [TestMethod]
+        public void TestFormulaEvaluatorDivisionByZero()
+        {
+            Formula f = new Formula("5/0");
+            Assert.IsInstanceOfType(f.Evaluate(null) , typeof(FormulaError));
+        }
+        [TestMethod]
+        public void TestFormulaEvaluatorDivisionByZeroVariable()
+        {
+            Formula f = new Formula("5/x", normalizer, isValid);
+            Assert.IsInstanceOfType(f.Evaluate((X) => 0), typeof(FormulaError));
+        }
+        [TestMethod]
+        public void TestFormulaEvaluatorDivisionByZeroOverload()
+        {
+            Formula f = new Formula("1/(0/5)", normalizer, isValid);
+            Assert.IsInstanceOfType(f.Evaluate((X) => 0), typeof(FormulaError));
+        }
+        [TestMethod]
+        public void TestFormulaEvaluateMultiplicationOverload()
+        {
+            Formula f = new Formula("2*(x*5)*2", normalizer, isValid);
+            Assert.IsTrue(f.Evaluate((X) => 5).ToString() == "100");
         }
         // ************************** GetVariable Tests ************************* //
         [TestMethod]
@@ -257,6 +288,39 @@ namespace FormulaTests
             {
                 Assert.IsTrue((variables[i] == formulaVars[i]));
             }
+        }
+        // ************************** ToString Tests ************************* //
+        [TestMethod]
+        public void TestFormulaToString()
+        {
+            Formula f = new Formula("(x)", normalizer, isValid);
+            Assert.IsTrue(f.ToString() == "(X)");
+        }
+        [TestMethod]
+        public void TestFormulaToStringNoNormalizer()
+        {
+            Formula f = new Formula("(x)");
+            Assert.IsTrue(f.ToString() == "(x)");
+        }
+        [TestMethod]
+        public void TestFormulaToStringSpaces()
+        {
+            Formula f = new Formula("(x + x)", normalizer, isValid);
+            Assert.IsTrue(f.ToString() == "(X+X)");
+        }
+        [TestMethod]
+        public void TestFormulaToStringSpacesNoNormalizer()
+        {
+            Formula f = new Formula("(x + x)");
+            Assert.IsTrue(f.ToString() == "(x+x)");
+        }
+        // ************************** Equals Tests ************************* //
+        [TestMethod]
+        public void TestFormulaEquals()
+        {
+            Formula f = new Formula("(x + x)", normalizer, isValid);
+            Formula f2 = new Formula("(X+X)", normalizer, isValid);
+            Assert.IsTrue(f.Equals(f2));
         }
     }
 }
