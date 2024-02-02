@@ -10,6 +10,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 ```
 # Comments to Evaluators:
     There isn't a whole lot of comments for the test methods because they are all so short, so instead I commented the different sections of what I am testing (i.e. Formula Constructor, Evaluator, etc.)
+    and added "see title" comments
 
 # Assignment Specific Topics
     I didn't find any specific topics to write about on this assignment.
