@@ -4,7 +4,7 @@ Start Date: 01-11-2024
 Course: CS 3500, University of Utah, School of Computing
 GitHub ID: aj5050
 Repo: https://github.com/aj5050/Spreadsheet
-Commit Date: 1-25-2024
+Commit Date: 2-1-2024
 Solution: Spreadsheet
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
@@ -48,6 +48,8 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Feb 1st: Wrote 16 test cases specifically for throwing exceptions, fixed bugs presented by these 
 	tests. Also commented why the exceptions are throwing. Wrote 21 test cases for Evaluator method and 
 	GetVariable method. Added 10 more tests to get more coverage, fixed bugs presented by these tests.
+	Finished writing tests, added comments, fixed isTokenVariable extension, formatted all files. Also
+	finished the getHashCode method, so the first rough draft is done, ready for submission. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -69,4 +71,5 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 29th: 1:00pm - 1:20pm
 	Jan 30th: 12:40pm - 12:55pm 3:40pm - 5:20pm
 	Jan 31st: 2:30pm - 4:50pm
-	Feb 1st: 10:50am - 11:55am 12:15pm - 1:45pm 2:05pm - 3:15pm 3:45pm - 5:25pm
+	Feb 1st: 10:50am - 11:55am 12:15pm - 1:45pm 2:05pm - 3:15pm 3:45pm - 5:25pm 7:25pm - 9:00pm
+	Assignment 3 Total Hours: ~9 hours 10 minutes
