@@ -362,3 +362,10 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /GradingTests/GradingTests.csproj
+/GradingTests/GradingTests.csproj
+/GradingTests/GradingTests.csproj
+/GradingTests/AssignmentThreeGradingTests.cs
+/GradingTests/GlobalUsings.cs
+/GradingTests
+/GradingTests/AS2_Dep_Graph_Grading_Tests.cs
+/GradingTests/AssignmentOneGradingTests.cs

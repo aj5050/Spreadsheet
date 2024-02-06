@@ -107,7 +107,7 @@ namespace SpreadsheetUtilities
 
 
             //throw for null formula
-            if (formula == null)
+            if (formula == null||formula ==  "")
             {
                 throw new FormulaFormatException("formula cannot be empty");
             }
