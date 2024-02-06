@@ -50,6 +50,8 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	GetVariable method. Added 10 more tests to get more coverage, fixed bugs presented by these tests.
 	Finished writing tests, added comments, fixed isTokenVariable extension, formatted all files. Also
 	finished the getHashCode method, so the first rough draft is done, ready for submission. 
+	----------------------------------
+	Feb 5th: Started assignment 4, added header comments and README files to all classes. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -73,3 +75,6 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Jan 31st: 2:30pm - 4:50pm
 	Feb 1st: 10:50am - 11:55am 12:15pm - 1:45pm 2:05pm - 3:15pm 3:45pm - 5:25pm 7:25pm - 9:00pm
 	Assignment 3 Total Hours: ~9 hours 10 minutes
+	----------------------------------
+	Assignment 4 Estimated Hours: 10 hrs
+	Feb 5th: 8:20pm - 8:36pm
