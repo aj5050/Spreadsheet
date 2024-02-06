@@ -58,6 +58,7 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class DependencyGraph
     {
+        
         private Dictionary<string, List<string>> DG;
         private List<string> dependentsList;
         private int pairSize;
