@@ -59,8 +59,8 @@ namespace SpreadsheetUtilities
     public class DependencyGraph
     {
         
-        private Dictionary<string, List<string>> DG;
-        private List<string> dependentsList;
+        private Dictionary<string, HashSet<string>> DG;
+        private HashSet<string> dependentsList;
         private int pairSize;
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public DependencyGraph()
         {
-            dependentsList = new List<string>();
-            DG = new Dictionary<string, List<string>>();
+            dependentsList = new HashSet<string>();
+            DG = new Dictionary<string, HashSet<string>>();
             pairSize = 0;
         }
 
@@ -146,7 +146,7 @@ namespace SpreadsheetUtilities
         public IEnumerable<string> GetDependents(string s)
         {
             //returns an empty list if s has no dependents, returns dependents otherwise
-            List<string> result = new List<string>();
+            HashSet<string> result = new HashSet<string>();
             if (HasDependents(s))
             {
                 result = DG[s];
@@ -188,11 +188,11 @@ namespace SpreadsheetUtilities
         /// 
         public void AddDependency(string s, string t)
         {
-            List<string> temp;
+            HashSet<string> temp;
             //if there is no list of dependents associated with s, then add s to the dictionary and put the dependent t in the pair list for s and in the private dependentList.
             if (!DG.TryGetValue(s, out temp))
             {
-                temp = new List<string>();
+                temp = new HashSet<string>();
                 DG.Add(s, temp);
 
 
@@ -238,7 +238,7 @@ namespace SpreadsheetUtilities
                 //cannot use foreach loop, as the list changes when we remove a dependency.
                 for (int i = DG[s].Count - 1; i >= 0; i--)
                 {
-                    RemoveDependency(s, DG[s][i]);
+                    RemoveDependency(s, DG[s].ElementAt(i));
                 }
                 foreach (string value in newDependents)
                 {
