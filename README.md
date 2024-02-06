@@ -52,6 +52,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	finished the getHashCode method, so the first rough draft is done, ready for submission. 
 	----------------------------------
 	Feb 5th: Started assignment 4, added header comments and README files to all classes. 
+	Feb 6th: 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -78,3 +79,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	----------------------------------
 	Assignment 4 Estimated Hours: 10 hrs
 	Feb 5th: 8:20pm - 8:36pm
+	Feb 6th: 11:45am - 12:05pm 12:25pm - 12:50pm
