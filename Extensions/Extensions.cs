@@ -95,5 +95,13 @@ namespace Extensions
             }
             return false;
         }
+        public static bool isValidCell(string name)
+        {
+            if(Regex.IsMatch(name, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*"))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
