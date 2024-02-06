@@ -175,9 +175,18 @@ namespace SpreadsheetUtilities
 
             foreach (string token in GetTokens(formula))
             {
+                
                 if (token != " ")
                 {
-                    sb.Append(normalize(token));
+                    if (double.TryParse(token, out double possibleDouble))
+                    {
+                        sb.Append(possibleDouble);
+                    }
+                    else
+                    {
+                        sb.Append(normalize(token));
+                    }
+                    
                 }
 
             }
@@ -228,11 +237,18 @@ namespace SpreadsheetUtilities
                 // and all variables require a length of at least 2. 
                 else if (Extensions.Extensions.isTokenVariable(substring))
                 {
-                    if (lookup(substring) == 0 && operatorStack.Count > 0 && operatorStack.Peek() == "/")
-                    {
-                        return new FormulaError();
+                    try{
+                        if (lookup(substring) == 0 && operatorStack.Count > 0 && operatorStack.Peek() == "/")
+                        {
+                            return new FormulaError();
+                        }
+                        Extensions.Extensions.valPush(lookup(substring), operatorStack, valueStack);
                     }
-                    Extensions.Extensions.valPush(lookup(substring), operatorStack, valueStack);
+                    catch(ArgumentException argExc)
+                    {
+                        return new FormulaError(argExc.ToString());
+                    }
+                    
                 }
                 // this else if statement asserts that the substring is an operator, and if it is, then it either calls the opPop helper method
                 // (for the + and - operators) or pushes the operator onto the operatorStack
@@ -370,7 +386,11 @@ namespace SpreadsheetUtilities
                 Formula objFormula = (Formula)obj;
                 string formulaStr = this.ToString();
                 string objFormulaStr = objFormula.ToString();
-                if (formulaStr == objFormulaStr)
+                
+                if (formulaStr.Equals(objFormulaStr))
+                {
+                    return true;
+                }else if(double.TryParse(formulaStr, out double resultStr)&&double.TryParse(objFormulaStr,out double resultObjStr)&& resultStr == resultObjStr)
                 {
                     return true;
                 }
