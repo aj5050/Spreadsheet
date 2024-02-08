@@ -19,6 +19,6 @@ Copyright:  CS 3500 and Austin January - This work may not be copied for use in 
 
 # References:
 
-    1. Title of page - URL
+    1. Unit Test C# [TestInitialize] - https://stackoverflow.com/questions/26548017/unit-test-c-sharp-testinitialize
     2. Title of page - URL
     3. Title of page - URL
