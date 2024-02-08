@@ -97,7 +97,7 @@ namespace Extensions
         }
         public static bool isValidCell(string name)
         {
-            if(Regex.IsMatch(name, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*"))
+            if(Regex.IsMatch(name, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
             {
                 return true;
             }
