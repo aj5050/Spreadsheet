@@ -17,6 +17,7 @@
 /// </summary>
 /// <inheritdoc>
 using SpreadsheetUtilities;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SS
@@ -141,10 +142,63 @@ namespace SS
             }
             return result;
         }
-
+        /// <summary>
+        /// Set the contents of the named cell to the formula.  
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentNullException"> 
+        ///   If formula parameter is null, throw an ArgumentNullException.
+        /// </exception>
+        /// 
+        /// <exception cref="InvalidNameException"> 
+        ///   If the name is null or invalid, throw an InvalidNameException
+        /// </exception>
+        /// 
+        /// <exception cref="CircularException"> 
+        ///   If changing the contents of the named cell to be the formula would 
+        ///   cause a circular dependency, throw a CircularException.  
+        ///   (NOTE: No change is made to the spreadsheet.)
+        /// </exception>
+        /// 
+        /// <param name="name"> The cell name</param>
+        /// <param name="formula"> The content of the cell</param>
+        /// 
+        /// <returns>
+        ///   <para>
+        ///     The method returns a Set consisting of name plus the names of all other 
+        ///     cells whose value depends, directly or indirectly, on the named cell.
+        ///   </para>
+        ///   <para> 
+        ///     For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        ///     set {A1, B1, C1} is returned.
+        ///   </para>
+        /// 
+        /// </returns>
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            throw new NotImplementedException();
+            HashSet<string> result = new HashSet<string>();
+            if (!Extensions.Extensions.isValidCell(name) || name == null)
+            {
+                throw new InvalidNameException();
+            }
+            else if (formula == null)
+            {
+                throw new ArgumentNullException("formula cannot be null");
+            }
+            else if(formula.GetVariables().Contains(name))
+            {
+                throw new CircularException();
+            }
+            Data[name] = formula;
+            result.Add(name);
+            if (DG.HasDependents(name))
+            {
+                foreach (string dependent in DG.GetDependents(name))
+                {
+                    result.Add(dependent);
+                }
+            }
+            return result;
         }
 
         protected override IEnumerable<string> GetDirectDependents(string name)
