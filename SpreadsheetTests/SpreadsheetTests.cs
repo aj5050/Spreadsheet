@@ -122,6 +122,12 @@ namespace SS
             spreadsheet.SetCellContents("A1", f);
         }
         [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void TestCyclicTextCell()
+        {
+            spreadsheet.SetCellContents("A1", "A1+2");
+        }
+        [TestMethod]
         public void TestGetSingleCell()
         {
             spreadsheet.SetCellContents("A1", 2.0);
@@ -165,14 +171,14 @@ namespace SS
         public void TestSetMultipleTextCell()
         {
             spreadsheet.SetCellContents("A1", "test");
-            spreadsheet.SetCellContents("B1", new Formula("A1+2"));
-            spreadsheet.SetCellContents("C1", new Formula("B1 + A1"));
+            spreadsheet.SetCellContents("B1", "A1+2");
+            spreadsheet.SetCellContents("C1", "B1 + A1");
             ISet<string> actual = spreadsheet.SetCellContents("A1", "tests");
             HashSet<string> expected = new HashSet<string> { "A1", "B1", "C1" };
             Assert.IsTrue(expected.ToString() == actual.ToString());
         }
         [TestMethod]
-        public void TestSetMultipleForula()
+        public void TestSetMultipleFormula()
         {
             spreadsheet.SetCellContents("A1", new Formula("2+2"));
             spreadsheet.SetCellContents("B1", new Formula("A1+2"));
@@ -180,6 +186,14 @@ namespace SS
             ISet<string> actual = spreadsheet.SetCellContents("A1", new Formula("2+3"));
             HashSet<string> expected = new HashSet<string> { "A1", "B1", "C1" };
             Assert.IsTrue(expected.ToString() == actual.ToString());
+        }
+        [TestMethod]
+        public void TestGetFormulaEval()
+        {
+            spreadsheet.SetCellContents("A1", new Formula("2+2"));
+            spreadsheet.SetCellContents("B1", new Formula("A1+2"));
+            spreadsheet.SetCellContents("C1", new Formula("B1 + A1"));
+            Assert.IsTrue(10.0 == (double)spreadsheet.GetCellContents("C1"));
         }
     }
 }
