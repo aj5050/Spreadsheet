@@ -15,15 +15,15 @@
 ///     
 /// 
 /// </summary>
-/// <inheritdoc>
 using SpreadsheetUtilities;
+using System.Reflection;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SS
 {
     /// <summary>
-    /// 
+    /// <inheritdoc/>
     /// </summary>
     public class Spreadsheet : AbstractSpreadsheet
     {
@@ -45,11 +45,12 @@ namespace SS
         /// </returns>
         public override object GetCellContents(string name)
         {
-            if (!Extensions.Extensions.isValidCell(name)||name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
-            return Data.TryGetValue(name, out object result);
+            Data.TryGetValue(name, out object result);
+            return result;
         }
         /// <inheritdoc />
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
@@ -81,7 +82,7 @@ namespace SS
         public override ISet<string> SetCellContents(string name, double number)
         {
             HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
@@ -89,7 +90,7 @@ namespace SS
             result.Add(name);
             if (DG.HasDependents(name))
             {
-                foreach(string dependent in DG.GetDependents(name))
+                foreach(string dependent in GetDirectDependents(name))
                 {
                     result.Add(dependent);
                 }
@@ -124,10 +125,10 @@ namespace SS
         public override ISet<string> SetCellContents(string name, string text)
         {
             HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
-            }else if(text == null)
+            }else if(text is null)
             {
                 throw new ArgumentNullException("text cannot be null");
             }
@@ -135,7 +136,7 @@ namespace SS
             result.Add(name);
             if (DG.HasDependents(name))
             {
-                foreach (string dependent in DG.GetDependents(name))
+                foreach (string dependent in GetDirectDependents(name))
                 {
                     result.Add(dependent);
                 }
@@ -177,33 +178,73 @@ namespace SS
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
             HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
-            else if (formula == null)
+            else if (formula is null)
             {
                 throw new ArgumentNullException("formula cannot be null");
             }
             else if(formula.GetVariables().Contains(name))
             {
                 throw new CircularException();
+            } 
+            else if(formula.GetVariables() is not null)
+            {
+                foreach(string variable in formula.GetVariables())
+                {
+                    DG.AddDependency(variable, name);
+                }
             }
             Data[name] = formula;
             result.Add(name);
+           
             if (DG.HasDependents(name))
             {
-                foreach (string dependent in DG.GetDependents(name))
+                foreach (string dependent in GetDirectDependents(name))
                 {
                     result.Add(dependent);
                 }
             }
             return result;
         }
-
+        /// <summary>
+        /// Returns an enumeration, without duplicates, of the names of all cells whose
+        /// values depend directly on the value of the named cell. 
+        /// </summary>
+        /// 
+        /// <requires>
+        /// The name that is passed in must be valid.
+        /// </requires>
+        /// 
+        /// <param name="name"></param>
+        /// <returns>
+        ///   Returns an enumeration, without duplicates, of the names of all cells that contain
+        ///   formulas containing name.
+        /// 
+        ///   <para>For example, suppose that: </para>
+        ///   <list type="bullet">
+        ///      <item>A1 contains 3</item>
+        ///      <item>B1 contains the formula A1 * A1</item>
+        ///      <item>C1 contains the formula B1 + A1</item>
+        ///      <item>D1 contains the formula B1 - C1</item>
+        ///   </list>
+        /// 
+        ///   <para>The direct dependents of A1 are B1 and C1</para>
+        /// 
+        /// </returns>
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
-            throw new NotImplementedException();
+            HashSet<string> result = new HashSet<string>();
+            if (DG.HasDependents(name))
+            {
+                foreach(string dependent in DG.GetDependents(name))
+                {
+                    result.Add(dependent);
+                }
+            }
+            return result;
         }
     }
 }
