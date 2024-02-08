@@ -54,6 +54,9 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Feb 5th: Started assignment 4, added header comments and README files to all classes. 
 	Feb 6th: Fixed both DependencyGraph efficiency and Formula bugs. Started writing methods for 
 	assignment 4, got 4 methods done. 
+	Feb 7th: Finished SetCell(name, formula).
+	Feb 8th: Finished rough draft of Spreadsheet, need to write tests and consult t.a.'s. Wrote more tests,
+	fixed bugs presented by tests. Got 100% coverage.
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -80,4 +83,6 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	----------------------------------
 	Assignment 4 Estimated Hours: 10 hrs
 	Feb 5th: 8:20pm - 8:36pm
-	Feb 6th: 11:45am - 12:05pm 12:25pm - 12:50pm 2:10pm - 3:15pm
+	Feb 6th: 11:45am - 12:05pm 12:25pm - 12:50pm 2:10pm - 3:15pm 
+	Feb 7th: 1:25pm - 1:35pm
+	Feb 8th: 10:55am - 12:00pm 12:25pm - 1:40pm
