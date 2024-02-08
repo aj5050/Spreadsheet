@@ -3,7 +3,7 @@ Author: Austin January
 Start Date: 01-30-2024
 Course: CS 3500, University of Utah, School of Computing
 GitHub ID: aj5050
-Repo: https://github.com/aj5050/Spreadsheet
+Repo: https://github.com/uofu-cs3500-spring24/spreadsheet-aj5050
 Commit Date: 2-1-2024
 Project: Formula
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
