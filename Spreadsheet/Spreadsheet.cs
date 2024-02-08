@@ -12,7 +12,7 @@
 /// in my README file.
 ///
 /// File Contents
-///     
+///     This file contains the namespace SS which contains an implimentation of the AbstractSpreadsheet abstract class.
 /// 
 /// </summary>
 using SpreadsheetUtilities;
