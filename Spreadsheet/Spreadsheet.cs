@@ -17,6 +17,7 @@
 /// </summary>
 using SpreadsheetUtilities;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -90,7 +91,7 @@ namespace SS
             result.Add(name);
             if (DG.HasDependents(name))
             {
-                foreach(string dependent in GetDirectDependents(name))
+                foreach (string dependent in GetDirectDependents(name))
                 {
                     result.Add(dependent);
                 }
@@ -125,22 +126,41 @@ namespace SS
         public override ISet<string> SetCellContents(string name, string text)
         {
             HashSet<string> result = new HashSet<string>();
+
+
             if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
-            }else if(text is null)
+            }
+            else if (text is null)
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            Data[name] = text;
-            result.Add(name);
-            if (DG.HasDependents(name))
+            
+            Formula f = new Formula(text);
+            
+            foreach (string token in f.GetVariables())
             {
-                foreach (string dependent in GetDirectDependents(name))
+                if (Extensions.Extensions.isValidCell(token))
                 {
-                    result.Add(dependent);
+                    if(token == name)
+                    {
+                        throw new CircularException();
+                    }
+                    else
+                    {
+                        DG.AddDependency(token, name);
+                    }
+                    
                 }
             }
+            Data[name] = text;
+            result.Add(name);
+            foreach (string dependent in GetDirectDependents(name))
+            {
+                result.Add(dependent);
+            }
+
             return result;
         }
         /// <summary>
@@ -186,27 +206,26 @@ namespace SS
             {
                 throw new ArgumentNullException("formula cannot be null");
             }
-            else if(formula.GetVariables().Contains(name))
+            else if (formula.GetVariables().Contains(name))
             {
                 throw new CircularException();
-            } 
-            else if(formula.GetVariables() is not null)
+            }
+            else if (formula.GetVariables() is not null)
             {
-                foreach(string variable in formula.GetVariables())
+                foreach (string variable in formula.GetVariables())
                 {
                     DG.AddDependency(variable, name);
                 }
             }
-            Data[name] = formula;
+            Data[name] = formula.Evaluate((x) => (double)GetCellContents(x));
             result.Add(name);
-           
-            if (DG.HasDependents(name))
+
+
+            foreach (string dependent in GetDirectDependents(name))
             {
-                foreach (string dependent in GetDirectDependents(name))
-                {
-                    result.Add(dependent);
-                }
+                result.Add(dependent);
             }
+
             return result;
         }
         /// <summary>
@@ -237,13 +256,12 @@ namespace SS
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
             HashSet<string> result = new HashSet<string>();
-            if (DG.HasDependents(name))
+
+            foreach (string dependent in DG.GetDependents(name))
             {
-                foreach(string dependent in DG.GetDependents(name))
-                {
-                    result.Add(dependent);
-                }
+                result.Add(dependent);
             }
+
             return result;
         }
     }
