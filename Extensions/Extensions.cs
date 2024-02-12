@@ -95,9 +95,14 @@ namespace Extensions
             }
             return false;
         }
+        /// <summary>
+        /// This method checks if the given name qualifies as a cell
+        /// </summary>
+        /// <param name="name"> the string that is being evaluated as a cell</param>
+        /// <returns> a true/false statement based on whether or not the name is a cell</returns>
         public static bool isValidCell(string name)
         {
-            if(Regex.IsMatch(name, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*"))
+            if (Regex.IsMatch(name, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
             {
                 return true;
             }

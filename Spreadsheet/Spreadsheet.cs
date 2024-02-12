@@ -12,198 +12,112 @@
 /// in my README file.
 ///
 /// File Contents
-///     
+///     This file contains the namespace SS which contains an implimentation of the AbstractSpreadsheet abstract class.
 /// 
 /// </summary>
-/// <inheritdoc>
 using SpreadsheetUtilities;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SS
 {
     /// <summary>
-    /// 
+    /// <inheritdoc/>
     /// </summary>
     public class Spreadsheet : AbstractSpreadsheet
     {
         DependencyGraph DG = new DependencyGraph();
         Dictionary<string, object> Data = new Dictionary<string, object>();
-        /// <summary>
-        ///   Returns the contents (as opposed to the value) of the named cell.
-        /// </summary>
-        /// 
-        /// <exception cref="InvalidNameException"> 
-        ///   Thrown if the name is null or invalid
-        /// </exception>
-        /// 
-        /// <param name="name">The name of the spreadsheet cell to query</param>
-        /// 
-        /// <returns>
-        ///   The return value should be either a string, a double, or a Formula.
-        ///   See the class header summary 
-        /// </returns>
+        /// <inheritdoc />
         public override object GetCellContents(string name)
         {
-            if (!Extensions.Extensions.isValidCell(name)||name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
-            return Data.TryGetValue(name, out object result);
+            Data.TryGetValue(name, out object result);
+            return result;
         }
         /// <inheritdoc />
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
             return Data.Keys;
         }
-        /// <summary>
-        ///  Set the contents of the named cell to the given number.  
-        /// </summary>
-        /// 
-        /// <exception cref="InvalidNameException"> 
-        ///   If the name is null or invalid, throw an InvalidNameException
-        /// </exception>
-        /// 
-        /// <param name="name"> The name of the cell </param>
-        /// <param name="number"> The new contents/value </param>
-        /// 
-        /// <returns>
-        ///   <para>
-        ///      The method returns a set consisting of name plus the names of all other cells whose value depends, 
-        ///      directly or indirectly, on the named cell.
-        ///   </para>
-        /// 
-        ///   <para>
-        ///      For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        ///      set {A1, B1, C1} is returned.
-        ///   </para>
-        /// </returns>
+        /// <inheritdoc />
         public override ISet<string> SetCellContents(string name, double number)
         {
             HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
             Data[name] = number;
-            result.Add(name);
-            if (DG.HasDependents(name))
-            {
-                foreach(string dependent in DG.GetDependents(name))
-                {
-                    result.Add(dependent);
-                }
-            }
-            return result;
+            return GetCellsToRecalculate(name).ToHashSet();
+
         }
-        /// <summary>
-        /// The contents of the named cell becomes the text.  
-        /// </summary>
-        /// 
-        /// <exception cref="ArgumentNullException"> 
-        ///   If text is null, throw an ArgumentNullException.
-        /// </exception>
-        /// 
-        /// <exception cref="InvalidNameException"> 
-        ///   If the name is null or invalid, throw an InvalidNameException
-        /// </exception>
-        /// 
-        /// <param name="name"> The name of the cell </param>
-        /// <param name="text"> The new content/value of the cell</param>
-        /// 
-        /// <returns>
-        ///   The method returns a set consisting of name plus the names of all 
-        ///   other cells whose value depends, directly or indirectly, on the 
-        ///   named cell.
-        /// 
-        ///   <para>
-        ///     For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        ///     set {A1, B1, C1} is returned.
-        ///   </para>
-        /// </returns>
+        /// <inheritdoc />
         public override ISet<string> SetCellContents(string name, string text)
         {
             HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
+
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
-            }else if(text == null)
+            }
+            else if (text is null)
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            Data[name] = text;
-            result.Add(name);
-            if (DG.HasDependents(name))
-            {
-                foreach (string dependent in DG.GetDependents(name))
-                {
-                    result.Add(dependent);
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// Set the contents of the named cell to the formula.  
-        /// </summary>
-        /// 
-        /// <exception cref="ArgumentNullException"> 
-        ///   If formula parameter is null, throw an ArgumentNullException.
-        /// </exception>
-        /// 
-        /// <exception cref="InvalidNameException"> 
-        ///   If the name is null or invalid, throw an InvalidNameException
-        /// </exception>
-        /// 
-        /// <exception cref="CircularException"> 
-        ///   If changing the contents of the named cell to be the formula would 
-        ///   cause a circular dependency, throw a CircularException.  
-        ///   (NOTE: No change is made to the spreadsheet.)
-        /// </exception>
-        /// 
-        /// <param name="name"> The cell name</param>
-        /// <param name="formula"> The content of the cell</param>
-        /// 
-        /// <returns>
-        ///   <para>
-        ///     The method returns a Set consisting of name plus the names of all other 
-        ///     cells whose value depends, directly or indirectly, on the named cell.
-        ///   </para>
-        ///   <para> 
-        ///     For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        ///     set {A1, B1, C1} is returned.
-        ///   </para>
-        /// 
-        /// </returns>
-        public override ISet<string> SetCellContents(string name, Formula formula)
-        {
-            HashSet<string> result = new HashSet<string>();
-            if (!Extensions.Extensions.isValidCell(name) || name == null)
-            {
-                throw new InvalidNameException();
-            }
-            else if (formula == null)
-            {
-                throw new ArgumentNullException("formula cannot be null");
-            }
-            else if(formula.GetVariables().Contains(name))
+            else if (text.Contains(name))
             {
                 throw new CircularException();
             }
-            Data[name] = formula;
-            result.Add(name);
-            if (DG.HasDependents(name))
+
+
+            Data[name] = text;
+            return GetCellsToRecalculate(name).ToHashSet();
+
+        }
+        /// <inheritdoc />
+        public override ISet<string> SetCellContents(string name, Formula formula)
+        {
+            HashSet<string> result = new HashSet<string>();
+            if (name is null || !Extensions.Extensions.isValidCell(name))
             {
-                foreach (string dependent in DG.GetDependents(name))
+                throw new InvalidNameException();
+            }
+            else if (formula is null)
+            {
+                throw new ArgumentNullException("formula cannot be null");
+            }
+            else if (formula.GetVariables() is not null)
+            {
+                if (formula.GetVariables().Contains(name))
                 {
-                    result.Add(dependent);
+                    throw new CircularException();
+                }
+                foreach (string variable in formula.GetVariables())
+                {
+                    DG.AddDependency(variable, name);
                 }
             }
-            return result;
-        }
+            Data[name] = formula.Evaluate((x) => (double)GetCellContents(x));
+            return GetCellsToRecalculate(name).ToHashSet();
 
+        }
+        /// <inheritdoc />
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
-            throw new NotImplementedException();
+            HashSet<string> result = new HashSet<string>();
+
+            foreach (string dependent in DG.GetDependents(name))
+            {
+                result.Add(dependent);
+            }
+
+            return result;
         }
     }
 }

@@ -3,8 +3,8 @@ Author:     Austin January
 Partner:    None
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  aj5050
-Repo:       https://github.com/aj5050/Spreadsheet
-Date:       1-25-2024 Time (when submission was completed) 
+Repo:       https://github.com/uofu-cs3500-spring24/spreadsheet-aj5050
+Date:       2-9-2024 9:15am (when submission was completed) 
 Project:    SpreadsheetTests
 Copyright:  CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
@@ -19,6 +19,6 @@ Copyright:  CS 3500 and Austin January - This work may not be copied for use in 
 
 # References:
 
-    1. Title of page - URL
+    1. Unit Test C# [TestInitialize] - https://stackoverflow.com/questions/26548017/unit-test-c-sharp-testinitialize
     2. Title of page - URL
     3. Title of page - URL
