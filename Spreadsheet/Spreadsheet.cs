@@ -30,35 +30,74 @@ namespace SS
     {
         DependencyGraph DG = new DependencyGraph();
         Dictionary<string, object> Data = new Dictionary<string, object>();
+
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
+        {
+        }
+
+        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+
         /// <inheritdoc />
         public override object GetCellContents(string name)
         {
             if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
-            }
-            Data.TryGetValue(name, out object result);
-            return result;
+            }else if (!Data.ContainsKey(name)||Data[name] is null)
+            {
+                return "";
+            }        
+            return Data[name];
         }
+
+        public override object GetCellValue(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <inheritdoc />
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
-            return Data.Keys;
-        }
-        /// <inheritdoc />
-        public override ISet<string> SetCellContents(string name, double number)
-        {
             HashSet<string> result = new HashSet<string>();
+            foreach(string key in  Data.Keys) {
+                if(Data[key] is not null && Data[key] != "")
+                {
+                    result.Add(key);
+                }
+            }
+            return result;
+        }
+
+        public override string GetSavedVersion(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetXML()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Save(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public override IList<string> SetCellContents(string name, double number)
+        {
+            
             if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
             }
             Data[name] = number;
-            return GetCellsToRecalculate(name).ToHashSet();
+           
+            return GetCellsToRecalculate(name).ToList();
 
         }
         /// <inheritdoc />
-        public override ISet<string> SetCellContents(string name, string text)
+        public override IList<string> SetCellContents(string name, string text)
         {
             HashSet<string> result = new HashSet<string>();
 
@@ -74,14 +113,12 @@ namespace SS
             {
                 throw new CircularException();
             }
-
-
             Data[name] = text;
             return GetCellsToRecalculate(name).ToHashSet();
 
         }
         /// <inheritdoc />
-        public override ISet<string> SetCellContents(string name, Formula formula)
+        public override IList<string> SetCellContents(string name, Formula formula)
         {
             HashSet<string> result = new HashSet<string>();
             if (name is null || !Extensions.Extensions.isValidCell(name))
@@ -103,10 +140,16 @@ namespace SS
                     DG.AddDependency(variable, name);
                 }
             }
-            Data[name] = formula.Evaluate((x) => (double)GetCellContents(x));
+            Data[name] = formula;
             return GetCellsToRecalculate(name).ToHashSet();
 
         }
+
+        public override IList<string> SetContentsOfCell(string name, string content)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <inheritdoc />
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
