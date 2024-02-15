@@ -46,7 +46,15 @@ namespace SS
         /// <inheritdoc />
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
-            return Data.Keys;
+            HashSet<string> result = new HashSet<string>();
+            foreach (string key in Data.Keys)
+            {
+                if (Data[key] is not null && Data[key] != "")
+                {
+                    result.Add(key);
+                }
+            }
+            return result;
         }
         /// <inheritdoc />
         public override ISet<string> SetCellContents(string name, double number)
