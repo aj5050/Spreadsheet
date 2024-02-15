@@ -84,7 +84,7 @@ namespace SS
         }
 
         /// <inheritdoc />
-        public override IList<string> SetCellContents(string name, double number)
+        protected override IList<string> SetCellContents(string name, double number)
         {
             
             if (name is null || !Extensions.Extensions.isValidCell(name))
@@ -97,7 +97,7 @@ namespace SS
 
         }
         /// <inheritdoc />
-        public override IList<string> SetCellContents(string name, string text)
+        protected override IList<string> SetCellContents(string name, string text)
         {
             HashSet<string> result = new HashSet<string>();
 
@@ -114,11 +114,11 @@ namespace SS
                 throw new CircularException();
             }
             Data[name] = text;
-            return GetCellsToRecalculate(name).ToHashSet();
+            return GetCellsToRecalculate(name).ToList();
 
         }
         /// <inheritdoc />
-        public override IList<string> SetCellContents(string name, Formula formula)
+        protected override IList<string> SetCellContents(string name, Formula formula)
         {
             HashSet<string> result = new HashSet<string>();
             if (name is null || !Extensions.Extensions.isValidCell(name))
@@ -141,7 +141,7 @@ namespace SS
                 }
             }
             Data[name] = formula;
-            return GetCellsToRecalculate(name).ToHashSet();
+            return GetCellsToRecalculate(name).ToList();
 
         }
 
