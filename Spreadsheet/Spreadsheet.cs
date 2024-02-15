@@ -64,8 +64,9 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            result = GetCellsToRecalculate(name).ToHashSet();
             Data[name] = number;
-            return GetCellsToRecalculate(name).ToHashSet();
+            return result;
 
         }
         /// <inheritdoc />
@@ -86,9 +87,9 @@ namespace SS
                 throw new CircularException();
             }
 
-
+            result = GetCellsToRecalculate(name).ToHashSet();
             Data[name] = text;
-            return GetCellsToRecalculate(name).ToHashSet();
+            return result;
 
         }
         /// <inheritdoc />
@@ -114,8 +115,9 @@ namespace SS
                     DG.AddDependency(variable, name);
                 }
             }
-            Data[name] = formula.Evaluate((x) => (double)GetCellContents(x));
-            return GetCellsToRecalculate(name).ToHashSet();
+            result = GetCellsToRecalculate(name).ToHashSet();
+            Data[name] = formula;
+            return result;
 
         }
         /// <inheritdoc />
