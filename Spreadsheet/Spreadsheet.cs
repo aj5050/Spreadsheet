@@ -37,8 +37,11 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            Data.TryGetValue(name, out object result);
-            return result;
+            else if (!Data.ContainsKey(name) || Data[name] is null)
+            {
+                return "";
+            }
+            return Data[name];
         }
         /// <inheritdoc />
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
