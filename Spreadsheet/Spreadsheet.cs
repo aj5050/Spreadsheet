@@ -51,10 +51,42 @@ namespace SS
             
             return Data[Normalize(name)];
         }
-
+        /// <summary>
+        /// If name is invalid, throws an InvalidNameException.
+        /// </summary>
+        ///
+        /// <exception cref="InvalidNameException"> 
+        ///   If the name is invalid, throw an InvalidNameException
+        /// </exception>
+        /// 
+        /// <param name="name"> The name of the cell that we want the value of (will be normalized)</param>
+        /// 
+        /// <returns>
+        ///   Returns the value (as opposed to the contents) of the named cell.  The return
+        ///   value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
+        /// </returns>
         public override object GetCellValue(string name)
         {
-            throw new NotImplementedException();
+            if (name is null || !Extensions.Extensions.isValidCell(name) || !IsValid(name))
+            {
+                throw new InvalidNameException();
+            }
+            else if (Data[Normalize(name)] is string)
+            {
+                return Data[Normalize(name)];
+            }
+            else
+            {
+                if(Data[Normalize(name)] is double)
+                {
+                    return Data[Normalize(name)];
+                }
+                else
+                {
+                    return ((Formula)Data[Normalize(name)]).Evaluate((x) => (double)GetCellContents(x));
+                }
+            }
+            
         }
 
         /// <inheritdoc />
@@ -89,7 +121,18 @@ namespace SS
         /// <returns>Returns the version information of the spreadsheet saved in the named file.</returns>
         public override string GetSavedVersion(string filename)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(filename))
+                {
+                    while (reader.Read())
+                    {
+                       
+                    }
+                }
+            }catch(Exception ex) {
+                throw new SpreadsheetReadWriteException("Filename couldn't be accessed/couldn't be written/doesn't exist");
+            }
         }
         /// <summary>
         ///   Return an XML representation of the spreadsheet's contents
@@ -128,6 +171,7 @@ namespace SS
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("spreadsheet");
+                    writer.WriteElementString("version", "version 1.0");
                     foreach (string key in Data.Keys)
                     {
                         writer.WriteStartElement("cell");
@@ -137,10 +181,12 @@ namespace SS
 
                     }
                     writer.WriteEndElement();
+                    
                 }
+                
             }catch(Exception ex)
             {
-                throw new SpreadsheetReadWriteException("Filename couldn't be accessed/couldn't be written/doesn't exist");
+                throw new SpreadsheetReadWriteException("Couldn't save under this file's name");
             }
             
             
@@ -154,8 +200,8 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            DG.ReplaceDependees(name, new List<string>());
             Data[Normalize(name)] = number;
-           
             return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
@@ -172,7 +218,7 @@ namespace SS
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            
+            DG.ReplaceDependees(name, new List<string>());
             Data[Normalize(name)] = text;
             return GetCellsToRecalculate(Normalize(name)).ToList();
 
@@ -222,8 +268,8 @@ namespace SS
                 return SetCellContents(name, value);
             }else if (content.StartsWith('='))
             {
-                content.Remove(0, 1);
-                return SetCellContents(name, new Formula(content));
+                string input = content.Remove(0, 1);
+                return SetCellContents(name, new Formula(input));
             }
             else
             {
