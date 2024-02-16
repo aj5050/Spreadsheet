@@ -49,7 +49,7 @@ namespace SS
             HashSet<string> result = new HashSet<string>();
             foreach (string key in Data.Keys)
             {
-                if (Data[key] is not null && Data[key] != "")
+                if (Data[key] is not null && !Data[key].Equals(""))
                 {
                     result.Add(key);
                 }
@@ -64,6 +64,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            DG.ReplaceDependees(name,new List<string>());
             result = GetCellsToRecalculate(name).ToHashSet();
             Data[name] = number;
             return result;
@@ -82,11 +83,8 @@ namespace SS
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            else if (text.Contains(name))
-            {
-                throw new CircularException();
-            }
-
+       
+            DG.ReplaceDependees(name, new List<string>());
             result = GetCellsToRecalculate(name).ToHashSet();
             Data[name] = text;
             return result;
@@ -96,6 +94,7 @@ namespace SS
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
             HashSet<string> result = new HashSet<string>();
+
             if (name is null || !Extensions.Extensions.isValidCell(name))
             {
                 throw new InvalidNameException();
@@ -104,18 +103,27 @@ namespace SS
             {
                 throw new ArgumentNullException("formula cannot be null");
             }
-            else if (formula.GetVariables() is not null)
+            IEnumerable<string> ogDependees = DG.GetDependees(name);
+            if (formula.GetVariables() is not null)
             {
+
                 if (formula.GetVariables().Contains(name))
                 {
                     throw new CircularException();
                 }
-                foreach (string variable in formula.GetVariables())
-                {
-                    DG.AddDependency(variable, name);
-                }
+                DG.ReplaceDependees(name, formula.GetVariables());
             }
-            result = GetCellsToRecalculate(name).ToHashSet();
+            
+            try
+            {
+                result = GetCellsToRecalculate(name).ToHashSet();
+            }catch(Exception ex)
+            {
+                DG.ReplaceDependees(name, ogDependees);
+                throw ex;
+            }
+            
+            
             Data[name] = formula;
             return result;
 
