@@ -192,19 +192,30 @@ namespace SS
             {
                 throw new ArgumentNullException("formula cannot be null");
             }
-            else if (formula.GetVariables() is not null)
+            IEnumerable<string> ogDependees = DG.GetDependees(Normalize(name));
+            if (formula.GetVariables() is not null)
             {
+
                 if (formula.GetVariables().Contains(Normalize(name)))
                 {
                     throw new CircularException();
                 }
-                foreach (string variable in formula.GetVariables())
-                {
-                    DG.AddDependency(variable, Normalize(name));
-                }
+                DG.ReplaceDependees(Normalize(name), formula.GetVariables());
             }
+
+            try
+            {
+                result = GetCellsToRecalculate(Normalize(name)).ToHashSet();
+            }
+            catch (Exception ex)
+            {
+                DG.ReplaceDependees(Normalize(name), ogDependees);
+                throw ex;
+            }
+
+
             Data[Normalize(name)] = formula;
-            return GetCellsToRecalculate(Normalize(name)).ToList();
+            return result.ToList();
 
         }
 
