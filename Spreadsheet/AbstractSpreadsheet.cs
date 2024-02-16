@@ -487,7 +487,7 @@ namespace SS
         ///
         ///       <para>
         ///           For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        ///           list {A1, B1, C1} is returned.  If the cells are then evaluate din the order:
+        ///           list {A1, B1, C1} is returned.  If the cells are then evaluated in the order:
         ///           A1, then B1, then C1, the integrity of the Spreadsheet is maintained.
         ///       </para>
         /// </returns>

@@ -40,14 +40,15 @@ namespace SS
         /// <inheritdoc />
         public override object GetCellContents(string name)
         {
-            if (name is null || !Extensions.Extensions.isValidCell(name))
+            if (name is null || !Extensions.Extensions.isValidCell(name)|| !IsValid(name))
             {
                 throw new InvalidNameException();
-            }else if (!Data.ContainsKey(name)||Data[name] is null)
+            }else if (!Data.ContainsKey(Normalize(name))||Data[Normalize(name)] is null)
             {
                 return "";
             }        
-            return Data[name];
+            
+            return Data[Normalize(name)];
         }
 
         public override object GetCellValue(string name)
@@ -87,13 +88,13 @@ namespace SS
         protected override IList<string> SetCellContents(string name, double number)
         {
             
-            if (name is null || !Extensions.Extensions.isValidCell(name))
+            if (name is null || !Extensions.Extensions.isValidCell(name) || !IsValid(name))
             {
                 throw new InvalidNameException();
             }
-            Data[name] = number;
+            Data[Normalize(name)] = number;
            
-            return GetCellsToRecalculate(name).ToList();
+            return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
         /// <inheritdoc />
@@ -101,7 +102,7 @@ namespace SS
         {
             HashSet<string> result = new HashSet<string>();
 
-            if (name is null || !Extensions.Extensions.isValidCell(name))
+            if (name is null || !Extensions.Extensions.isValidCell(name) || !IsValid(name))
             {
                 throw new InvalidNameException();
             }
@@ -109,19 +110,19 @@ namespace SS
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            else if (text.Contains(name))
+            else if (text.Contains(Normalize(name)))
             {
                 throw new CircularException();
             }
-            Data[name] = text;
-            return GetCellsToRecalculate(name).ToList();
+            Data[Normalize(name)] = text;
+            return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
         /// <inheritdoc />
         protected override IList<string> SetCellContents(string name, Formula formula)
         {
             HashSet<string> result = new HashSet<string>();
-            if (name is null || !Extensions.Extensions.isValidCell(name))
+            if (name is null || !Extensions.Extensions.isValidCell(name) || !IsValid(name))
             {
                 throw new InvalidNameException();
             }
@@ -131,31 +132,42 @@ namespace SS
             }
             else if (formula.GetVariables() is not null)
             {
-                if (formula.GetVariables().Contains(name))
+                if (formula.GetVariables().Contains(Normalize(name)))
                 {
                     throw new CircularException();
                 }
                 foreach (string variable in formula.GetVariables())
                 {
-                    DG.AddDependency(variable, name);
+                    DG.AddDependency(variable, Normalize(name));
                 }
             }
-            Data[name] = formula;
-            return GetCellsToRecalculate(name).ToList();
+            Data[Normalize(name)] = formula;
+            return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
 
         public override IList<string> SetContentsOfCell(string name, string content)
         {
-            throw new NotImplementedException();
+            if(double.TryParse(content,out double value))
+            {
+                return SetCellContents(name, value);
+            }else if (content.StartsWith('='))
+            {
+                content.Remove(0, 1);
+                return SetCellContents(name, new Formula(content));
+            }
+            else
+            {
+                return SetCellContents(name, content);
+            }
         }
 
         /// <inheritdoc />
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
             HashSet<string> result = new HashSet<string>();
-
-            foreach (string dependent in DG.GetDependents(name))
+            
+            foreach (string dependent in DG.GetDependents(Normalize(name)))
             {
                 result.Add(dependent);
             }
