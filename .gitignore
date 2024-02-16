@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /GradingTests
 /GradingTests/AS2_Dep_Graph_Grading_Tests.cs
 /GradingTests/AssignmentOneGradingTests.cs
+/Spreadsheet/AbstractSpreadsheet AS4.cs
+/Spreadsheet/AbstractSpreadsheet AS5.cs
