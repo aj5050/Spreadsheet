@@ -202,7 +202,6 @@ namespace SS
                 }
                 DG.ReplaceDependees(Normalize(name), formula.GetVariables());
             }
-
             try
             {
                 result = GetCellsToRecalculate(Normalize(name)).ToHashSet();
