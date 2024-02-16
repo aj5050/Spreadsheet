@@ -98,4 +98,4 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Feb 13th: 15 min
 	Feb 14th: 1hr
 	Feb 15th: 2hrs
-	Feb 16th: 11:20 am - 12:00pm 12:30pm - 2:10pm
+	Feb 16th: 11:20 am - 12:00pm 12:30pm - 2:10pm 2:30pm - 3:50pm

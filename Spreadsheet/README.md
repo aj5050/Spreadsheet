@@ -15,7 +15,7 @@ Copyright:  CS 3500 and Austin January - This work may not be copied for use in 
     N/A
 
 # Consulted Peers:
-    
+    Ted Staros
 
 # References:
 

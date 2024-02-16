@@ -127,12 +127,16 @@ namespace SS
                 {
                     while (reader.Read())
                     {
-                       
+                       if(reader.Name == "spreadsheet")
+                        {
+                            return reader.GetAttribute("version");
+                        }
                     }
                 }
             }catch(Exception ex) {
                 throw new SpreadsheetReadWriteException("Filename couldn't be accessed/couldn't be written/doesn't exist");
             }
+            throw new FileNotFoundException(filename);
         }
         /// <summary>
         ///   Return an XML representation of the spreadsheet's contents
@@ -140,6 +144,23 @@ namespace SS
         /// <returns> contents in XML form </returns>
         public override string GetXML()
         {
+            using ()
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("spreadsheet");
+                writer.WriteAttributeString("version", Version);
+                foreach (string key in Data.Keys)
+                {
+                    writer.WriteStartElement("cell");
+                    writer.WriteElementString("name", key);
+                    writer.WriteElementString("contents", Data[key].ToString());
+                    writer.WriteEndElement();
+
+                }
+                writer.WriteEndElement();
+                Changed = false;
+            }
+
             throw new NotImplementedException();
         }
         /// <summary>
@@ -171,7 +192,7 @@ namespace SS
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("spreadsheet");
-                    writer.WriteElementString("version", "version 1.0");
+                    writer.WriteAttributeString("version", Version);
                     foreach (string key in Data.Keys)
                     {
                         writer.WriteStartElement("cell");
@@ -181,7 +202,7 @@ namespace SS
 
                     }
                     writer.WriteEndElement();
-                    
+                    Changed = false;
                 }
                 
             }catch(Exception ex)
