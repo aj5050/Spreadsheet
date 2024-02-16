@@ -18,6 +18,7 @@
 using SpreadsheetUtilities;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -121,6 +122,11 @@ namespace SS
         /// </summary>
         public override void Save(string filename)
         {
+            using(XmlWriter writer = XmlWriter.Create(filename,new XmlWriterSettings()))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement();
+            }
             throw new NotImplementedException();
         }
 
