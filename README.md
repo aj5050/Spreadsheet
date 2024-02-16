@@ -59,6 +59,10 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	fixed bugs presented by tests. Got 100% coverage. Updated some text for SetCellContents, need to ask
 	t.a.'s if update was needed. Fixed bugs presented by the T.A.
 	----------------------------------
+	Feb 13th: Started fixing assignment 4, downloaded new abstractSpreadsheet class for assignment 5.
+	Feb 14th: Still fixing bugs
+	Feb 15th: Started writing code for assignment 5, created new branch.
+	Feb 16th: Started writing XML code, confused but getting help from the T.A.s
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -91,3 +95,7 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Assignment 4 Total Hours: ~7hrs 40 minutes
 	----------------------------------
 	Assignment 5 Estimated Hours: 10 hrs
+	Feb 13th: 15 min
+	Feb 14th: 1hr
+	Feb 15th: 2hrs
+	Feb 16th: 11:20 am - 12:00pm 12:30pm - 2:10pm
