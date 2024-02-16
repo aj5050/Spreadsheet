@@ -122,12 +122,28 @@ namespace SS
         /// </summary>
         public override void Save(string filename)
         {
-            using(XmlWriter writer = XmlWriter.Create(filename,new XmlWriterSettings()))
+            try
             {
-                writer.WriteStartDocument();
-                writer.WriteStartElement();
+                using (XmlWriter writer = XmlWriter.Create(filename, new XmlWriterSettings()))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("spreadsheet");
+                    foreach (string key in Data.Keys)
+                    {
+                        writer.WriteStartElement("cell");
+                        writer.WriteElementString("name", key);
+                        writer.WriteElementString("contents", Data[key].ToString());
+                        writer.WriteEndElement();
+
+                    }
+                    writer.WriteEndElement();
+                }
+            }catch(Exception ex)
+            {
+                throw new SpreadsheetReadWriteException("Filename couldn't be accessed/couldn't be written/doesn't exist");
             }
-            throw new NotImplementedException();
+            
+            
         }
 
         /// <inheritdoc />
