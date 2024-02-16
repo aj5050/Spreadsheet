@@ -172,10 +172,7 @@ namespace SS
             {
                 throw new ArgumentNullException("text cannot be null");
             }
-            else if (text.Contains(Normalize(name)))
-            {
-                throw new CircularException();
-            }
+            
             Data[Normalize(name)] = text;
             return GetCellsToRecalculate(Normalize(name)).ToList();
 
