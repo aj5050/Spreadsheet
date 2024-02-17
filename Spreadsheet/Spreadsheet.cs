@@ -16,6 +16,7 @@
 /// 
 /// </summary>
 using SpreadsheetUtilities;
+using System;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,6 +34,10 @@ namespace SS
         DependencyGraph DG = new DependencyGraph();
         Dictionary<string, object> Data = new Dictionary<string, object>();
         private bool changed = false;
+        public Spreadsheet() : this((x)=> Regex.IsMatch(x, "^[A-Za-z]+\\d+$"),(x)=>x.ToUpper(),"1")
+        {
+            
+        }
         /// <inheritdoc />
         public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
         {
