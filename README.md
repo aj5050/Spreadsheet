@@ -4,7 +4,7 @@ Start Date: 01-11-2024
 Course: CS 3500, University of Utah, School of Computing
 GitHub ID: aj5050
 Repo: https://github.com/uofu-cs3500-spring24/spreadsheet-aj5050
-Commit Date: 2-9-2024 9:15am
+Commit Date: 2-16-2024 8:15pm
 Solution: Spreadsheet
 Copyright: CS 3500 and Austin January - This work may not be copied for use in Academic Coursework.
 ```
@@ -61,8 +61,10 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	----------------------------------
 	Feb 13th: Started fixing assignment 4, downloaded new abstractSpreadsheet class for assignment 5.
 	Feb 14th: Still fixing bugs
-	Feb 15th: Started writing code for assignment 5, created new branch.
-	Feb 16th: Started writing XML code, confused but getting help from the T.A.s. Got help from the T.A.'s, finished rough draft of all methods
+	Feb 15th: Started writing code for assignment 5, created new branch, updated extensions so that the 
+	Regex string matched for the correct valid cells.
+	Feb 16th: Started writing XML code, confused but getting help from the T.A.s. Got help from the T.A.'s,
+	finished rough draft of all methods. Wrote more test code and filled in the header methods. 
 # Time Spent
 	Assignment 1: Estimated Hours : 17 hrs
 	Jan 11th: 1 1/2 hours
@@ -98,4 +100,5 @@ Copyright: CS 3500 and Austin January - This work may not be copied for use in A
 	Feb 13th: 15 min
 	Feb 14th: 1hr
 	Feb 15th: 2hrs
-	Feb 16th: 11:20 am - 12:00pm 12:30pm - 2:10pm 2:30pm - 3:50pm 4:20pm - 5:05pm 5:15pm - 6:10pm
+	Feb 16th: 11:20 am - 12:00pm 12:30pm - 2:10pm 2:30pm - 3:50pm 4:20pm - 5:05pm 5:15pm - 6:10pm 6:50pm - 8:00pm
+	Assignment 5 Total Hours: ~9hrs 45 min
