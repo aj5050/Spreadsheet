@@ -37,8 +37,12 @@ namespace SS
         public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
         {
         }
+        public Spreadsheet(string filename, Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
+        {
+        }
         /// <inheritdoc />
         public override bool Changed { get => changed; protected set => changed = value; }
+        
 
         /// <inheritdoc />
         public override object GetCellContents(string name)
@@ -74,7 +78,8 @@ namespace SS
                 }
                 else
                 {
-                    return ((Formula)Data[Normalize(name)]).Evaluate((x) => (double)GetCellValue(x));
+                    Formula input = new Formula(Data[Normalize(name)].ToString(), Normalize, IsValid);
+                    return input.Evaluate((x) => (double)GetCellValue(x));
                 }
             }
 
