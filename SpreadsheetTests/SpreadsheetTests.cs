@@ -31,7 +31,7 @@ namespace SS
         [TestInitialize]
         public void testInitialize()
         {
-            spreadsheet = new Spreadsheet();
+            spreadsheet = new Spreadsheet((x) => true, (x) => x.ToUpper(), "version 1");
         }
         /// <summary>
         /// These tests assert that an exception is thrown for invalid/null/circular cell names
@@ -290,5 +290,68 @@ namespace SS
             spreadsheet.SetCellContents("C1", new Formula("B1 + A1"));
             Assert.IsTrue(10.0 == (double)spreadsheet.GetCellContents("C1"));
         }
+        /* ---------------------------------------------------- */
+        [TestMethod]
+        public void GetCellContents_ValidCell_ReturnsCellContents()
+        {
+
+
+            spreadsheet.SetContentsOfCell("A1", "42");
+
+
+            Assert.AreEqual(42.0, spreadsheet.GetCellContents("A1"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetCellContents_InvalidCellName_ThrowsInvalidNameException()
+        {
+
+
+            object result = spreadsheet.GetCellContents("InvalidCell");
+        }
+
+        [TestMethod]
+        public void GetCellValue_StringCell_ReturnsStringValue()
+        {
+
+            spreadsheet.SetContentsOfCell("A1", "Hello");
+            Assert.AreEqual("Hello", spreadsheet.GetCellValue("A1"));
+        }
+
+        [TestMethod]
+        public void GetCellValue_FormulaCell_ReturnsFormulaResult()
+        {
+
+            spreadsheet.SetContentsOfCell("A1", "5");
+            spreadsheet.SetContentsOfCell("B1", "=A1*2");
+
+
+            Assert.AreEqual(10.0, spreadsheet.GetCellValue("B1"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetCellValue_InvalidCellName_ThrowsInvalidNameException()
+        {
+
+
+            object result = spreadsheet.GetCellValue("InvalidCell");
+        }
+
+        [TestMethod]
+        public void GetNamesOfAllNonemptyCells_MultipleNonemptyCells_ReturnsNonemptyCells()
+        {
+            ICollection<string> names = new HashSet<string>();
+            names.Add("A1");
+            names.Add("B2");
+
+
+            spreadsheet.SetContentsOfCell("A1", "42");
+            spreadsheet.SetContentsOfCell("B2", "Hello");
+
+            Assert.IsTrue(new HashSet<string>(spreadsheet.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "A1", "B2" }));
+        }
+
     }
 }

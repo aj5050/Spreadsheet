@@ -12,11 +12,12 @@
 /// in my README file.
 ///
 /// File Contents
-///     This file contains the namespace SS which contains an implimentation of the AbstractSpreadsheet abstract class.
+///     This file contains the namespace SS which contains an implementation of the AbstractSpreadsheet abstract class.
 /// 
 /// </summary>
 using SpreadsheetUtilities;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
@@ -31,12 +32,16 @@ namespace SS
     {
         DependencyGraph DG = new DependencyGraph();
         Dictionary<string, object> Data = new Dictionary<string, object>();
+        private bool changed = false;
 
         public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
         {
         }
-
-        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+        /// <summary>
+        /// True if this spreadsheet has been modified since it was created or saved                  
+        /// (whichever happened most recently); false otherwise.
+        /// </summary>
+        public override bool Changed { get => changed; protected set => changed = value; }
 
         /// <inheritdoc />
         public override object GetCellContents(string name)
@@ -144,7 +149,8 @@ namespace SS
         /// <returns> contents in XML form </returns>
         public override string GetXML()
         {
-            using ()
+            StringBuilder sb = new StringBuilder();
+            using (XmlWriter writer = XmlWriter.Create(sb))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("spreadsheet");
@@ -158,10 +164,8 @@ namespace SS
 
                 }
                 writer.WriteEndElement();
-                Changed = false;
             }
-
-            throw new NotImplementedException();
+            return sb.ToString();
         }
         /// <summary>
         /// Writes the contents of this spreadsheet to the named file using an XML format.
@@ -188,12 +192,13 @@ namespace SS
         {
             try
             {
+               
                 using (XmlWriter writer = XmlWriter.Create(filename, new XmlWriterSettings()))
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("spreadsheet");
                     writer.WriteAttributeString("version", Version);
-                    foreach (string key in Data.Keys)
+                    foreach (string key in GetNamesOfAllNonemptyCells())
                     {
                         writer.WriteStartElement("cell");
                         writer.WriteElementString("name", key);
@@ -223,6 +228,7 @@ namespace SS
             }
             DG.ReplaceDependees(name, new List<string>());
             Data[Normalize(name)] = number;
+            Changed = true;
             return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
@@ -241,6 +247,7 @@ namespace SS
             }
             DG.ReplaceDependees(name, new List<string>());
             Data[Normalize(name)] = text;
+            Changed = true;
             return GetCellsToRecalculate(Normalize(name)).ToList();
 
         }
@@ -275,9 +282,8 @@ namespace SS
                 DG.ReplaceDependees(Normalize(name), ogDependees);
                 throw ex;
             }
-
-
             Data[Normalize(name)] = formula;
+            Changed = true;
             return result.ToList();
 
         }
